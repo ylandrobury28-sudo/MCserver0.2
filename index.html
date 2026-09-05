@@ -1063,6 +1063,8 @@ td {
 
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
 
 /* =========================
@@ -1080,6 +1082,18 @@ td {
     be checked on a server, not in JavaScript.
 */
 const EDIT_PASSWORD = "DeconnectSMPIzanarchySaikyoX8**";
+
+// =========================
+// SUPABASE CONFIG
+// =========================
+// Replace these with the values from Supabase -> Project Settings -> API.
+const SUPABASE_URL = "https://vgvgfhvrfgbjaxgkjgam.supabase.co/rest/v1/";
+const SUPABASE_ANON_KEY = "sb_publishable_XH0CZjbhYSjvOAlE3DFZ9A_kZMASaRK";
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
 
 
 /* =========================
@@ -1145,15 +1159,80 @@ const tierLevels = {
 
 };
 
-let players =
-    JSON.parse(localStorage.getItem("mcRankedPlayers"))
-    || structuredClone(defaultPlayers);
+let players = [];
 
 let loggedUsername =
     localStorage.getItem("mcRankedUsername");
 
 let editing = false;
 
+
+/* =========================
+   ONLINE DATABASE
+========================= */
+
+async function loadPlayersFromDatabase() {
+
+    try {
+
+        const { data, error } = await supabaseClient
+            .from("players")
+            .select("id,name,tier,points")
+            .order("points", { ascending: false });
+
+        if (error) throw error;
+
+        // First visit: seed the database with the original players.
+        if (!data || data.length === 0) {
+
+            players = structuredClone(defaultPlayers);
+
+            await replacePlayersInDatabase(players);
+
+            return;
+        }
+
+        players = data.map(player => ({
+            id: player.id,
+            name: player.name,
+            tier: player.tier,
+            points: Number(player.points) || 0
+        }));
+
+    } catch (error) {
+
+        console.error("Supabase load error:", error);
+
+        players = structuredClone(defaultPlayers);
+
+        showToast("⚠️ Online database could not be loaded");
+
+    }
+}
+
+async function replacePlayersInDatabase(list) {
+
+    const { error: deleteError } = await supabaseClient
+        .from("players")
+        .delete()
+        .neq("id", 0);
+
+    if (deleteError) throw deleteError;
+
+    const rows = list.map(player => ({
+        name: String(player.name).trim(),
+        tier: player.tier,
+        points: Math.max(0, Number(player.points) || 0)
+    }));
+
+    if (!rows.length) return;
+
+    const { error: insertError } = await supabaseClient
+        .from("players")
+        .insert(rows);
+
+    if (insertError) throw insertError;
+}
 
 /* =========================
    LOGIN
@@ -1197,7 +1276,7 @@ function login() {
 
 }
 
-function showWebsite() {
+async function showWebsite() {
 
     document.getElementById(
         "loginScreen"
@@ -1214,6 +1293,8 @@ function showWebsite() {
     document.getElementById(
         "footerUsername"
     ).textContent = loggedUsername;
+
+    await loadPlayersFromDatabase();
 
     renderAll();
 
@@ -1850,41 +1931,84 @@ function deletePlayer(index) {
    SAVE / RESET
 ========================= */
 
-function saveData() {
+async function saveData() {
 
-    localStorage.setItem(
-        "mcRankedPlayers",
-        JSON.stringify(players)
-    );
+    if (!editing) return;
 
-    showToast(
-        "✓ Changes saved"
-    );
+    const saveButton =
+        document.querySelector(".save-bar .save");
+
+    if (saveButton) {
+        saveButton.disabled = true;
+        saveButton.textContent = "Saving...";
+    }
+
+    try {
+
+        await replacePlayersInDatabase(players);
+
+        await loadPlayersFromDatabase();
+
+        renderAll();
+
+        showToast(
+            "✓ Changes saved for everyone"
+        );
+
+    } catch (error) {
+
+        console.error("Supabase save error:", error);
+
+        showToast(
+            "❌ Save failed — check Supabase settings"
+        );
+
+    } finally {
+
+        if (saveButton) {
+            saveButton.disabled = false;
+            saveButton.textContent = "Save";
+        }
+
+    }
 
 }
 
-function resetData() {
+async function resetData() {
 
-    if (
-        !confirm(
-            "Reset all players to the original leaderboard?"
-        )
-    ) {
+    if (!editing) return;
+
+    if (!confirm(
+        "Reset all players to the original leaderboard?"
+    )) {
         return;
     }
 
-    players =
-        structuredClone(defaultPlayers);
+    try {
 
-    saveData();
-    renderAll();
+        await replacePlayersInDatabase(
+            structuredClone(defaultPlayers)
+        );
+
+        await loadPlayersFromDatabase();
+
+        renderAll();
+
+        showToast(
+            "✓ Leaderboard reset for everyone"
+        );
+
+    } catch (error) {
+
+        console.error("Supabase reset error:", error);
+
+        showToast(
+            "❌ Reset failed — check Supabase settings"
+        );
+
+    }
 
 }
-
-
-/* =========================
-   PROFILE
-========================= */
 
 function openProfile(index) {
 
