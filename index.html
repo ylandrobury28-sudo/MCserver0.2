@@ -461,6 +461,68 @@ td {
     font-size: 11px;
 }
 
+/* VIDEOS */
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.video-card {
+    background: rgba(17,22,34,.9);
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    overflow: hidden;
+    transition: .2s;
+}
+
+.video-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(124,92,255,.35);
+}
+
+.video-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #090c13;
+}
+
+.video-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.video-info {
+    padding: 16px;
+}
+
+.video-info h3 {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+.video-info p {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.video-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    background: rgba(124,92,255,.12);
+    color: #bcaeff;
+    font-size: 10px;
+    font-weight: 800;
+}
+
 /* MODAL */
 
 .modal {
@@ -677,6 +739,10 @@ td {
         grid-template-columns: repeat(2,1fr);
     }
 
+    .video-grid {
+        grid-template-columns: 1fr;
+    }
+
     .nav {
         flex-direction: column;
     }
@@ -687,7 +753,9 @@ td {
 <body>
 
 <!-- LOGIN SCREEN -->
+
 <div class="login-screen" id="loginScreen">
+
     <div class="login-box">
 
         <div class="login-logo">⚔</div>
@@ -714,14 +782,22 @@ td {
         <div class="login-error" id="loginError"></div>
 
     </div>
+
 </div>
 
+
+<!-- HEADER -->
+
 <header class="header">
+
     <nav class="nav">
 
         <div class="logo">
+
             <div class="logo-icon">⚔</div>
+
             MC RANKED
+
         </div>
 
         <div class="nav-buttons">
@@ -747,6 +823,12 @@ td {
 
             <button
                 class="nav-btn"
+                onclick="goTo('videos',this)">
+                🎥 Videos
+            </button>
+
+            <button
+                class="nav-btn"
                 onclick="goTo('tiers',this)">
                 Tier List
             </button>
@@ -754,9 +836,16 @@ td {
         </div>
 
     </nav>
+
 </header>
 
+
+<!-- MAIN -->
+
 <main class="container">
+
+
+    <!-- HERO -->
 
     <section class="hero">
 
@@ -775,63 +864,140 @@ td {
 
     </section>
 
+
+    <!-- STATS -->
+
     <section class="stats">
 
         <div class="stat">
-            <div class="stat-label">PLAYERS</div>
-            <div class="stat-value" id="playerCount">0</div>
+
+            <div class="stat-label">
+                PLAYERS
+            </div>
+
+            <div
+                class="stat-value"
+                id="playerCount">
+                0
+            </div>
+
         </div>
 
-        <div class="stat">
-            <div class="stat-label">TOP PLAYER</div>
-            <div class="stat-value" id="topPlayer">—</div>
-        </div>
 
         <div class="stat">
-            <div class="stat-label">YOUR ACCOUNT</div>
-            <div class="stat-value" id="loggedPlayer">—</div>
+
+            <div class="stat-label">
+                TOP PLAYER
+            </div>
+
+            <div
+                class="stat-value"
+                id="topPlayer">
+                —
+            </div>
+
         </div>
 
+
         <div class="stat">
-            <div class="stat-label">TOTAL POINTS</div>
-            <div class="stat-value" id="totalPoints">0</div>
+
+            <div class="stat-label">
+                YOUR ACCOUNT
+            </div>
+
+            <div
+                class="stat-value"
+                id="loggedPlayer">
+                —
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-label">
+                TOTAL POINTS
+            </div>
+
+            <div
+                class="stat-value"
+                id="totalPoints">
+                0
+            </div>
+
         </div>
 
     </section>
 
+
     <!-- LEADERBOARD -->
 
-    <section class="section" id="leaderboard">
+    <section
+        class="section"
+        id="leaderboard">
 
         <div class="section-title">
-            <h2>🏆 Leaderboard</h2>
-            <p>Click a player to see their full profile.</p>
+
+            <h2>
+                🏆 Leaderboard
+            </h2>
+
+            <p>
+                Click a player to see their full profile.
+            </p>
+
         </div>
+
 
         <div class="panel">
 
             <div class="search-wrap">
+
                 <input
                     id="search"
                     class="search"
                     placeholder="🔎 Search every player..."
                     oninput="renderTable()"
                 >
+
             </div>
+
 
             <div class="table-wrap">
 
                 <table>
 
                     <thead>
+
                         <tr>
-                            <th>Rank</th>
-                            <th>Player</th>
-                            <th>Tier</th>
-                            <th>Points</th>
-                            <th>Level</th>
-                            <th>Profile</th>
+
+                            <th>
+                                Rank
+                            </th>
+
+                            <th>
+                                Player
+                            </th>
+
+                            <th>
+                                Tier
+                            </th>
+
+                            <th>
+                                Points
+                            </th>
+
+                            <th>
+                                Level
+                            </th>
+
+                            <th>
+                                Profile
+                            </th>
+
                         </tr>
+
                     </thead>
 
                     <tbody id="playerTable"></tbody>
@@ -840,113 +1006,334 @@ td {
 
             </div>
 
+
             <button
                 id="addPlayerButton"
                 class="add-player"
                 onclick="addPlayer()">
+
                 + Add Player
+
             </button>
 
         </div>
 
     </section>
 
+
     <!-- TOP PLAYERS -->
 
-    <section class="section" id="players">
+    <section
+        class="section"
+        id="players">
 
         <div class="section-title">
-            <h2>🥇 Top Players</h2>
-            <p>The current top three.</p>
+
+            <h2>
+                🥇 Top Players
+            </h2>
+
+            <p>
+                The current top three.
+            </p>
+
         </div>
 
-        <div class="podium" id="podium"></div>
+
+        <div
+            class="podium"
+            id="podium">
+        </div>
 
     </section>
 
-    <!-- TIERS -->
 
-    <section class="section" id="tiers">
+    <!-- IZANARCHYMC VIDEOS -->
+
+    <section
+        class="section"
+        id="videos">
 
         <div class="section-title">
-            <h2>📊 Tier List</h2>
-            <p>Official tier mapping.</p>
+
+            <h2>
+                🎥 izanarchymc Videos
+            </h2>
+
+            <p>
+                Watch izanarchymc Minecraft videos and PvP content.
+            </p>
+
         </div>
 
+
+        <div class="video-grid">
+
+
+            <!-- VIDEO 1 -->
+
+            <div class="video-card">
+
+                <div class="video-frame">
+
+                    <iframe
+                        src="https://www.youtube.com/embed/JVj8C97vKcQ"
+                        title="izanarchymc Video 1"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+
+                </div>
+
+
+                <div class="video-info">
+
+                    <h3>
+                        izanarchymc — Minecraft PvP
+                    </h3>
+
+                    <p>
+                        Minecraft PvP gameplay from izanarchymc.
+                    </p>
+
+                    <span class="video-badge">
+                        IZANARCHYMC
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- VIDEO 2 -->
+
+            <div class="video-card">
+
+                <div class="video-frame">
+<iframe
+    src="https://www.youtube.com/embed/1p9hKnr5i_Y?start=361"
+    title="izanarchymc Video 2"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen>
+</iframe>
+
+                </div>
+
+
+                <div class="video-info">
+
+                    <h3>
+                        izanarchymc — PvP Highlights
+                    </h3>
+
+                    <p>
+                        Minecraft PvP highlights from izanarchymc.
+                    </p>
+
+                    <span class="video-badge">
+                        PVP HIGHLIGHTS
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- VIDEO 3 -->
+
+            <div class="video-card">
+
+                <div class="video-frame">
+
+                    <iframe
+                        src="https://www.youtube.com/embed/YOUR_VIDEO_ID_3"
+                        title="izanarchymc Video 3"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+
+                </div>
+
+
+                <div class="video-info">
+
+                    <h3>
+                        izanarchymc — Ranked
+                    </h3>
+
+                    <p>
+                        Ranked Minecraft gameplay from izanarchymc.
+                    </p>
+
+                    <span class="video-badge">
+                        RANKED
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- VIDEO 4 -->
+
+            <div class="video-card">
+
+                <div class="video-frame">
+
+                    <iframe
+                        src="https://www.youtube.com/embed/YOUR_VIDEO_ID_4"
+                        title="izanarchymc Video 4"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+
+                </div>
+
+
+                <div class="video-info">
+
+                    <h3>
+                        izanarchymc — Best Moments
+                    </h3>
+
+                    <p>
+                        More Minecraft moments from izanarchymc.
+                    </p>
+
+                    <span class="video-badge">
+                        IZANARCHYMC
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- TIERS -->
+
+    <section
+        class="section"
+        id="tiers">
+
+        <div class="section-title">
+
+            <h2>
+                📊 Tier List
+            </h2>
+
+            <p>
+                Official tier mapping.
+            </p>
+
+        </div>
+
+
         <div class="tier-grid">
+
 
             <div class="tier-box">
                 <strong>A+</strong>
                 <span>HT1</span>
             </div>
 
+
             <div class="tier-box">
                 <strong>A</strong>
                 <span>LT1</span>
             </div>
+
 
             <div class="tier-box">
                 <strong>B+</strong>
                 <span>HT2</span>
             </div>
 
+
             <div class="tier-box">
                 <strong>B</strong>
                 <span>LT2</span>
             </div>
+
 
             <div class="tier-box">
                 <strong>C+</strong>
                 <span>HT3</span>
             </div>
 
+
             <div class="tier-box">
                 <strong>C</strong>
                 <span>LT3</span>
             </div>
+
 
             <div class="tier-box">
                 <strong>D+</strong>
                 <span>HT4</span>
             </div>
 
+
             <div class="tier-box">
                 <strong>D</strong>
                 <span>LT4</span>
             </div>
+
 
             <div class="tier-box">
                 <strong>E+</strong>
                 <span>HT5</span>
             </div>
 
+
             <div class="tier-box">
                 <strong>E</strong>
                 <span>LT5</span>
             </div>
 
+
         </div>
 
     </section>
 
+
+    <!-- FOOTER -->
+
     <div class="footer">
-        MC Ranked • Welcome <span id="footerUsername"></span>
+
+        MC Ranked • Welcome
+        <span id="footerUsername"></span>
+
     </div>
 
 </main>
 
+
 <!-- EDIT PASSWORD MODAL -->
 
-<div class="modal" id="passwordModal">
+<div
+    class="modal"
+    id="passwordModal">
 
     <div class="modal-box">
 
-        <h2>🔐 Admin Edit Mode</h2>
+        <h2>
+            🔐 Admin Edit Mode
+        </h2>
 
         <p>
-            Enter the edit password to modify players, ranks,
-            tiers and points.
+            Enter the edit password to modify players,
+            ranks, tiers and points.
         </p>
+
 
         <input
             id="editPassword"
@@ -956,27 +1343,38 @@ td {
             onkeydown="if(event.key==='Enter')verifyEditPassword()"
         >
 
+
         <div class="modal-actions">
 
             <button
                 class="cancel"
                 onclick="closePasswordModal()">
+
                 Cancel
+
             </button>
+
 
             <button
                 class="confirm"
                 onclick="verifyEditPassword()">
+
                 Unlock
+
             </button>
 
         </div>
 
-        <div class="login-error" id="passwordError"></div>
+
+        <div
+            class="login-error"
+            id="passwordError">
+        </div>
 
     </div>
 
 </div>
+
 
 <!-- PLAYER PROFILE -->
 
@@ -991,7 +1389,9 @@ td {
 
             <img id="profileHead">
 
-            <h2 id="profileName">Player</h2>
+            <h2 id="profileName">
+                Player
+            </h2>
 
             <p id="profileSubtitle">
                 Minecraft PvP Player
@@ -999,71 +1399,143 @@ td {
 
         </div>
 
+
         <div class="details">
 
             <div class="detail">
-                <span>POSITION</span>
-                <strong id="profileRank">#1</strong>
+
+                <span>
+                    POSITION
+                </span>
+
+                <strong id="profileRank">
+                    #1
+                </strong>
+
             </div>
 
-            <div class="detail">
-                <span>TIER</span>
-                <strong id="profileTier">A+</strong>
-            </div>
 
             <div class="detail">
-                <span>TIER LEVEL</span>
-                <strong id="profileLevel">HT1</strong>
+
+                <span>
+                    TIER
+                </span>
+
+                <strong id="profileTier">
+                    A+
+                </strong>
+
             </div>
 
-            <div class="detail">
-                <span>POINTS</span>
-                <strong id="profilePoints">0</strong>
-            </div>
 
             <div class="detail">
-                <span>ACCOUNT</span>
-                <strong id="profileAccount">Player</strong>
+
+                <span>
+                    TIER LEVEL
+                </span>
+
+                <strong id="profileLevel">
+                    HT1
+                </strong>
+
             </div>
 
+
             <div class="detail">
-                <span>STATUS</span>
+
+                <span>
+                    POINTS
+                </span>
+
+                <strong id="profilePoints">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span>
+                    ACCOUNT
+                </span>
+
+                <strong id="profileAccount">
+                    Player
+                </strong>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span>
+                    STATUS
+                </span>
+
                 <strong style="color:#39d98a">
                     ● Active
                 </strong>
+
             </div>
 
         </div>
 
+
         <button
             class="close"
             onclick="closeProfile()">
+
             Close Profile
+
         </button>
 
     </div>
 
 </div>
 
+
 <!-- SAVE BAR -->
 
-<div class="save-bar" id="saveBar">
+<div
+    class="save-bar"
+    id="saveBar">
 
-    <span>✎ Editing</span>
+    <span>
+        ✎ Editing
+    </span>
 
-    <button class="save" onclick="saveData()">
+
+    <button
+        class="save"
+        onclick="saveData()">
+
         Save
+
     </button>
 
-    <button class="reset" onclick="resetData()">
+
+    <button
+        class="reset"
+        onclick="resetData()">
+
         Reset
+
     </button>
 
 </div>
 
-<div class="toast" id="toast"></div>
+
+<div
+    class="toast"
+    id="toast">
+</div>
+
+
+<!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <script>
 
@@ -1071,29 +1543,26 @@ td {
    CONFIG
 ========================= */
 
-/*
-    IMPORTANT:
-    This is NOT your Minecraft password.
+const EDIT_PASSWORD =
+    "DeconnectSMPIzanarchySaikyoX8**";
 
-    Change this to whatever separate
-    admin password you want for editing.
 
-    For a real website, this password must
-    be checked on a server, not in JavaScript.
-*/
-const EDIT_PASSWORD = "DeconnectSMPIzanarchySaikyoX8**";
+/* =========================
+   SUPABASE CONFIG
+========================= */
 
-// =========================
-// SUPABASE CONFIG
-// =========================
-// Replace these with the values from Supabase -> Project Settings -> API.
-const SUPABASE_URL = "https://vgvgfhvrfgbjaxgkjgam.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZndmdmaHZyZmdiamF4Z2tqZ2FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MTc5MDEsImV4cCI6MjEwNDE5MzkwMX0.9rJrcSuP-z9FK2f27j0OcpV_6f1-XxOTXniDyUBjCK8";
+const SUPABASE_URL =
+    "https://vgvgfhvrfgbjaxgkjgam.supabase.co/rest/v1/";
 
-const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-);
+const SUPABASE_ANON_KEY =
+    "sb_publishable_XH0CZjbhYSjvOAlE3DFZ9A_kZMASaRK";
+
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
 
 
 /* =========================
@@ -1140,6 +1609,7 @@ const defaultPlayers = [
 
 ];
 
+
 const tierLevels = {
 
     "A+": "HT1",
@@ -1159,10 +1629,13 @@ const tierLevels = {
 
 };
 
+
 let players = [];
 
 let loggedUsername =
-    localStorage.getItem("mcRankedUsername");
+    localStorage.getItem(
+        "mcRankedUsername"
+    );
 
 let editing = false;
 
@@ -1175,64 +1648,117 @@ async function loadPlayersFromDatabase() {
 
     try {
 
-        const { data, error } = await supabaseClient
-            .from("players")
-            .select("id,name,tier,points")
-            .order("points", { ascending: false });
+        const { data, error } =
+            await supabaseClient
+                .from("players")
+                .select("id,name,tier,points")
+                .order(
+                    "points",
+                    { ascending: false }
+                );
 
         if (error) throw error;
 
-        // First visit: seed the database with the original players.
+
         if (!data || data.length === 0) {
 
-            players = structuredClone(defaultPlayers);
+            players =
+                structuredClone(
+                    defaultPlayers
+                );
 
-            await replacePlayersInDatabase(players);
+            await replacePlayersInDatabase(
+                players
+            );
 
             return;
         }
 
-        players = data.map(player => ({
-            id: player.id,
-            name: player.name,
-            tier: player.tier,
-            points: Number(player.points) || 0
-        }));
+
+        players =
+            data.map(player => ({
+
+                id: player.id,
+
+                name: player.name,
+
+                tier: player.tier,
+
+                points:
+                    Number(player.points) || 0
+
+            }));
+
 
     } catch (error) {
 
-        console.error("Supabase load error:", error);
+        console.error(
+            "Supabase load error:",
+            error
+        );
 
-        players = structuredClone(defaultPlayers);
+        players =
+            structuredClone(
+                defaultPlayers
+            );
 
-        showToast("⚠️ Online database could not be loaded");
+        showToast(
+            "⚠️ Online database could not be loaded"
+        );
 
     }
+
 }
+
 
 async function replacePlayersInDatabase(list) {
 
-    const { error: deleteError } = await supabaseClient
+    const {
+        error: deleteError
+    } = await supabaseClient
         .from("players")
         .delete()
         .neq("id", 0);
 
-    if (deleteError) throw deleteError;
 
-    const rows = list.map(player => ({
-        name: String(player.name).trim(),
-        tier: player.tier,
-        points: Math.max(0, Number(player.points) || 0)
-    }));
+    if (deleteError)
+        throw deleteError;
 
-    if (!rows.length) return;
 
-    const { error: insertError } = await supabaseClient
+    const rows =
+        list.map(player => ({
+
+            name:
+                String(player.name).trim(),
+
+            tier:
+                player.tier,
+
+            points:
+                Math.max(
+                    0,
+                    Number(player.points) || 0
+                )
+
+        }));
+
+
+    if (!rows.length)
+        return;
+
+
+    const {
+        error: insertError
+    } = await supabaseClient
         .from("players")
         .insert(rows);
 
-    if (insertError) throw insertError;
+
+    if (insertError)
+        throw insertError;
+
 }
+
 
 /* =========================
    LOGIN
@@ -1241,13 +1767,20 @@ async function replacePlayersInDatabase(list) {
 function login() {
 
     const input =
-        document.getElementById("mcUsername");
+        document.getElementById(
+            "mcUsername"
+        );
+
 
     const username =
         input.value.trim();
 
+
     const error =
-        document.getElementById("loginError");
+        document.getElementById(
+            "loginError"
+        );
+
 
     if (!username) {
 
@@ -1257,7 +1790,12 @@ function login() {
         return;
     }
 
-    if (!/^[A-Za-z0-9_]{3,16}$/.test(username)) {
+
+    if (
+        !/^[A-Za-z0-9_]{3,16}$/.test(
+            username
+        )
+    ) {
 
         error.textContent =
             "Enter a valid Minecraft username.";
@@ -1265,16 +1803,21 @@ function login() {
         return;
     }
 
-    loggedUsername = username;
+
+    loggedUsername =
+        username;
+
 
     localStorage.setItem(
         "mcRankedUsername",
         username
     );
 
+
     showWebsite();
 
 }
+
 
 async function showWebsite() {
 
@@ -1282,19 +1825,27 @@ async function showWebsite() {
         "loginScreen"
     ).style.display = "none";
 
+
     document.getElementById(
         "welcomeUsername"
-    ).textContent = loggedUsername;
+    ).textContent =
+        loggedUsername;
+
 
     document.getElementById(
         "loggedPlayer"
-    ).textContent = loggedUsername;
+    ).textContent =
+        loggedUsername;
+
 
     document.getElementById(
         "footerUsername"
-    ).textContent = loggedUsername;
+    ).textContent =
+        loggedUsername;
+
 
     await loadPlayersFromDatabase();
+
 
     renderAll();
 
@@ -1314,17 +1865,21 @@ function requestEditMode() {
         return;
     }
 
+
     document.getElementById(
         "editPassword"
     ).value = "";
+
 
     document.getElementById(
         "passwordError"
     ).textContent = "";
 
+
     document.getElementById(
         "passwordModal"
     ).classList.add("show");
+
 
     setTimeout(() => {
 
@@ -1336,6 +1891,7 @@ function requestEditMode() {
 
 }
 
+
 function verifyEditPassword() {
 
     const password =
@@ -1343,12 +1899,16 @@ function verifyEditPassword() {
             "editPassword"
         ).value;
 
+
     const error =
         document.getElementById(
             "passwordError"
         );
 
-    if (password !== EDIT_PASSWORD) {
+
+    if (
+        password !== EDIT_PASSWORD
+    ) {
 
         error.textContent =
             "❌ Incorrect edit password.";
@@ -1356,61 +1916,97 @@ function verifyEditPassword() {
         return;
     }
 
+
     document.getElementById(
         "passwordModal"
     ).classList.remove("show");
 
+
     editing = true;
 
-    document.body.classList.add("editing");
+
+    document.body.classList.add(
+        "editing"
+    );
+
 
     document.getElementById(
         "editModeButton"
-    ).textContent = "✓ Exit Edit Mode";
+    ).textContent =
+        "✓ Exit Edit Mode";
+
 
     document.getElementById(
         "editModeButton"
-    ).classList.add("editing");
+    ).classList.add(
+        "editing"
+    );
+
 
     document.getElementById(
         "saveBar"
-    ).classList.add("show");
+    ).classList.add(
+        "show"
+    );
 
-    showToast("🔓 Edit mode unlocked");
+
+    showToast(
+        "🔓 Edit mode unlocked"
+    );
+
 
     renderAll();
 
 }
+
 
 function exitEditMode() {
 
     editing = false;
 
-    document.body.classList.remove("editing");
+
+    document.body.classList.remove(
+        "editing"
+    );
+
 
     document.getElementById(
         "editModeButton"
-    ).textContent = "✎ Edit Mode";
+    ).textContent =
+        "✎ Edit Mode";
+
 
     document.getElementById(
         "editModeButton"
-    ).classList.remove("editing");
+    ).classList.remove(
+        "editing"
+    );
+
 
     document.getElementById(
         "saveBar"
-    ).classList.remove("show");
+    ).classList.remove(
+        "show"
+    );
+
 
     renderAll();
 
-    showToast("Edit mode locked");
+
+    showToast(
+        "Edit mode locked"
+    );
 
 }
+
 
 function closePasswordModal() {
 
     document.getElementById(
         "passwordModal"
-    ).classList.remove("show");
+    ).classList.remove(
+        "show"
+    );
 
 }
 
@@ -1427,11 +2023,15 @@ function renderAll() {
             Number(a.points)
     );
 
+
     renderTable();
+
     renderPodium();
+
     updateStats();
 
 }
+
 
 function renderTable() {
 
@@ -1440,6 +2040,7 @@ function renderTable() {
             "playerTable"
         );
 
+
     const search =
         document.getElementById(
             "search"
@@ -1447,53 +2048,81 @@ function renderTable() {
         .toLowerCase()
         .trim();
 
+
     const filtered =
         players
         .map((player,index) => ({
             player,
             index
         }))
-        .filter(({player,index}) => {
+        .filter(
+            ({player,index}) => {
 
-            const rank = index + 1;
+                const rank =
+                    index + 1;
 
-            const text = [
 
-                player.name,
-                player.tier,
-                tierLevels[player.tier],
-                player.points,
-                rank
+                const text = [
 
-            ].join(" ").toLowerCase();
+                    player.name,
 
-            return text.includes(search);
+                    player.tier,
 
-        });
+                    tierLevels[player.tier],
+
+                    player.points,
+
+                    rank
+
+                ]
+                .join(" ")
+                .toLowerCase();
+
+
+                return text.includes(
+                    search
+                );
+
+            }
+        );
+
 
     if (!filtered.length) {
 
         tbody.innerHTML = `
+
             <tr>
+
                 <td colspan="6">
+
                     <div style="
                         text-align:center;
                         padding:35px;
                         color:#8d97aa;
                     ">
+
                         No players found.
+
                     </div>
+
                 </td>
+
             </tr>
+
         `;
 
         return;
+
     }
 
-    tbody.innerHTML =
-        filtered.map(({player,index}) => {
 
-            const rank = index + 1;
+    tbody.innerHTML =
+        filtered
+        .map(({player,index}) => {
+
+            const rank =
+                index + 1;
+
 
             if (editing) {
 
@@ -1502,6 +2131,7 @@ function renderTable() {
                 <tr class="player-row">
 
                     <td>
+
                         <input
                             class="edit-field"
                             type="number"
@@ -1514,7 +2144,9 @@ function renderTable() {
                                 )
                             "
                         >
+
                     </td>
+
 
                     <td>
 
@@ -1524,6 +2156,7 @@ function renderTable() {
                                 class="head"
                                 src="${headURL(player.name)}"
                             >
+
 
                             <input
                                 class="edit-field"
@@ -1540,6 +2173,7 @@ function renderTable() {
                         </div>
 
                     </td>
+
 
                     <td>
 
@@ -1560,6 +2194,7 @@ function renderTable() {
 
                     </td>
 
+
                     <td>
 
                         <input
@@ -1577,34 +2212,51 @@ function renderTable() {
 
                     </td>
 
+
                     <td>
 
                         <button
                             class="small-btn"
                             onclick="
-                                movePlayer(${index},-1)
+                                movePlayer(
+                                    ${index},
+                                    -1
+                                )
                             ">
+
                             ▲
+
                         </button>
+
 
                         <button
                             class="small-btn"
                             onclick="
-                                movePlayer(${index},1)
+                                movePlayer(
+                                    ${index},
+                                    1
+                                )
                             ">
+
                             ▼
+
                         </button>
 
                     </td>
 
+
                     <td>
 
                         <button
                             class="small-btn"
                             onclick="
-                                deletePlayer(${index})
+                                deletePlayer(
+                                    ${index}
+                                )
                             ">
+
                             Delete
+
                         </button>
 
                     </td>
@@ -1615,21 +2267,30 @@ function renderTable() {
 
             }
 
+
             const isYou =
                 player.name.toLowerCase() ===
                 loggedUsername.toLowerCase();
+
 
             return `
 
             <tr
                 class="player-row"
-                onclick="openProfile(${index})"
+                onclick="
+                    openProfile(${index})
+                "
                 style="cursor:pointer"
             >
 
                 <td>
-                    <strong>#${rank}</strong>
+
+                    <strong>
+                        #${rank}
+                    </strong>
+
                 </td>
+
 
                 <td>
 
@@ -1639,6 +2300,7 @@ function renderTable() {
                             class="head"
                             src="${headURL(player.name)}"
                         >
+
 
                         <div class="player-name">
 
@@ -1656,6 +2318,7 @@ function renderTable() {
 
                 </td>
 
+
                 <td>
 
                     <span
@@ -1664,22 +2327,35 @@ function renderTable() {
                             ${tierClass(player.tier)}
                         "
                     >
+
                         ${player.tier}
+
                     </span>
 
                 </td>
 
+
                 <td>
+
                     <strong>
-                        ${Number(player.points).toLocaleString()}
+                        ${Number(
+                            player.points
+                        ).toLocaleString()}
                     </strong>
+
                 </td>
 
+
                 <td>
+
                     <span style="color:#8d97aa">
+
                         ${tierLevels[player.tier]}
+
                     </span>
+
                 </td>
+
 
                 <td>
 
@@ -1690,7 +2366,9 @@ function renderTable() {
                             openProfile(${index})
                         "
                     >
+
                         View →
+
                     </button>
 
                 </td>
@@ -1699,7 +2377,8 @@ function renderTable() {
 
             `;
 
-        }).join("");
+        })
+        .join("");
 
 }
 
@@ -1711,20 +2390,27 @@ function renderTable() {
 function renderPodium() {
 
     const podium =
-        document.getElementById("podium");
+        document.getElementById(
+            "podium"
+        );
+
 
     const top =
         players.slice(0,3);
 
+
     const order =
         [1,0,2];
+
 
     podium.innerHTML =
         order
         .filter(i => top[i])
         .map(i => {
 
-            const player = top[i];
+            const player =
+                top[i];
+
 
             return `
 
@@ -1733,21 +2419,38 @@ function renderPodium() {
                     podium-card
                     ${i === 0 ? "first" : ""}
                 "
-                onclick="openProfile(${i})"
+                onclick="
+                    openProfile(${i})
+                "
             >
 
                 <div style="
                     color:#ffd166;
                     font-weight:800;
                 ">
-                    ${i === 0 ? "👑 #1" : "#" + (i+1)}
+
+                    ${
+                        i === 0
+                        ? "👑 #1"
+                        : "#" + (i+1)
+                    }
+
                 </div>
 
-                <img src="${headURL(player.name)}">
+
+                <img
+                    src="${headURL(player.name)}"
+                >
+
 
                 <h3>
-                    ${escapeHTML(player.name)}
+
+                    ${escapeHTML(
+                        player.name
+                    )}
+
                 </h3>
+
 
                 <div style="margin:12px">
 
@@ -1757,20 +2460,28 @@ function renderPodium() {
                             ${tierClass(player.tier)}
                         "
                     >
+
                         ${player.tier}
+
                     </span>
 
                 </div>
 
+
                 <strong>
-                    ${Number(player.points).toLocaleString()} pts
+
+                    ${Number(
+                        player.points
+                    ).toLocaleString()} pts
+
                 </strong>
 
             </div>
 
             `;
 
-        }).join("");
+        })
+        .join("");
 
 }
 
@@ -1783,7 +2494,9 @@ function updateStats() {
 
     document.getElementById(
         "playerCount"
-    ).textContent = players.length;
+    ).textContent =
+        players.length;
+
 
     document.getElementById(
         "topPlayer"
@@ -1792,13 +2505,14 @@ function updateStats() {
         ? players[0].name
         : "—";
 
+
     document.getElementById(
         "totalPoints"
     ).textContent =
-        players
-        .reduce(
+        players.reduce(
             (sum,p) =>
-                sum + Number(p.points || 0),
+                sum +
+                Number(p.points || 0),
             0
         )
         .toLocaleString();
@@ -1826,7 +2540,10 @@ function updatePlayer(
 
     }
 
-    players[index][property] = value;
+
+    players[index][property] =
+        value;
+
 
     if (property === "points") {
 
@@ -1838,14 +2555,20 @@ function updatePlayer(
 
     }
 
+
     renderAll();
 
 }
 
-function movePlayer(index,direction) {
+
+function movePlayer(
+    index,
+    direction
+) {
 
     const target =
         index + direction;
+
 
     if (
         target < 0 ||
@@ -1853,6 +2576,7 @@ function movePlayer(index,direction) {
     ) {
         return;
     }
+
 
     [
         players[index],
@@ -1862,9 +2586,11 @@ function movePlayer(index,direction) {
         players[index]
     ];
 
+
     renderAll();
 
 }
+
 
 function changePosition(
     index,
@@ -1873,6 +2599,7 @@ function changePosition(
 
     let target =
         Number(position) - 1;
+
 
     target =
         Math.max(
@@ -1883,8 +2610,13 @@ function changePosition(
             )
         );
 
+
     const player =
-        players.splice(index,1)[0];
+        players.splice(
+            index,
+            1
+        )[0];
+
 
     players.splice(
         target,
@@ -1892,21 +2624,27 @@ function changePosition(
         player
     );
 
+
     renderAll();
 
 }
+
 
 function addPlayer() {
 
     players.push({
 
         name: "NewPlayer",
+
         tier: "E",
+
         points: 0
 
     });
 
+
     renderAll();
+
 
     showToast(
         "New player added"
@@ -1914,11 +2652,17 @@ function addPlayer() {
 
 }
 
+
 function deletePlayer(index) {
 
-    players.splice(index,1);
+    players.splice(
+        index,
+        1
+    );
+
 
     renderAll();
+
 
     showToast(
         "Player deleted"
@@ -1933,74 +2677,117 @@ function deletePlayer(index) {
 
 async function saveData() {
 
-    if (!editing) return;
+    if (!editing)
+        return;
+
 
     const saveButton =
-        document.querySelector(".save-bar .save");
+        document.querySelector(
+            ".save-bar .save"
+        );
+
 
     if (saveButton) {
-        saveButton.disabled = true;
-        saveButton.textContent = "Saving...";
+
+        saveButton.disabled =
+            true;
+
+        saveButton.textContent =
+            "Saving...";
+
     }
+
 
     try {
 
-        await replacePlayersInDatabase(players);
+        await replacePlayersInDatabase(
+            players
+        );
+
 
         await loadPlayersFromDatabase();
 
+
         renderAll();
+
 
         showToast(
             "✓ Changes saved for everyone"
         );
 
+
     } catch (error) {
 
-        console.error("Supabase save error:", error);
+        console.error(
+            "Supabase save error:",
+            error
+        );
+
 
         showToast(
             "❌ Save failed — check Supabase settings"
         );
 
+
     } finally {
 
         if (saveButton) {
-            saveButton.disabled = false;
-            saveButton.textContent = "Save";
+
+            saveButton.disabled =
+                false;
+
+            saveButton.textContent =
+                "Save";
+
         }
 
     }
 
 }
 
+
 async function resetData() {
 
-    if (!editing) return;
+    if (!editing)
+        return;
+
 
     if (!confirm(
         "Reset all players to the original leaderboard?"
     )) {
+
         return;
+
     }
+
 
     try {
 
         await replacePlayersInDatabase(
-            structuredClone(defaultPlayers)
+            structuredClone(
+                defaultPlayers
+            )
         );
+
 
         await loadPlayersFromDatabase();
 
+
         renderAll();
+
 
         showToast(
             "✓ Leaderboard reset for everyone"
         );
 
+
     } catch (error) {
 
-        console.error("Supabase reset error:", error);
+        console.error(
+            "Supabase reset error:",
+            error
+        );
+
 
         showToast(
             "❌ Reset failed — check Supabase settings"
@@ -2010,60 +2797,80 @@ async function resetData() {
 
 }
 
+
+/* =========================
+   PROFILE
+========================= */
+
 function openProfile(index) {
 
     const player =
         players[index];
+
 
     document.getElementById(
         "profileHead"
     ).src =
         headURL(player.name);
 
+
     document.getElementById(
         "profileName"
     ).textContent =
         player.name;
+
 
     document.getElementById(
         "profileRank"
     ).textContent =
         "#" + (index + 1);
 
+
     document.getElementById(
         "profileTier"
     ).textContent =
         player.tier;
+
 
     document.getElementById(
         "profileLevel"
     ).textContent =
         tierLevels[player.tier];
 
+
     document.getElementById(
         "profilePoints"
     ).textContent =
-        Number(player.points)
-        .toLocaleString();
+        Number(
+            player.points
+        ).toLocaleString();
+
 
     document.getElementById(
         "profileAccount"
     ).textContent =
         player.name;
 
+
     document.getElementById(
         "profileModal"
-    ).classList.add("show");
+    ).classList.add(
+        "show"
+    );
 
 }
+
 
 function closeProfile() {
 
     document.getElementById(
         "profileModal"
-    ).classList.remove("show");
+    ).classList.remove(
+        "show"
+    );
 
 }
+
 
 function closeProfileOutside(event) {
 
@@ -2071,7 +2878,9 @@ function closeProfileOutside(event) {
         event.target.id ===
         "profileModal"
     ) {
+
         closeProfile();
+
     }
 
 }
@@ -2081,20 +2890,31 @@ function closeProfileOutside(event) {
    NAVIGATION
 ========================= */
 
-function goTo(id,button) {
+function goTo(
+    id,
+    button
+) {
 
     document.getElementById(id)
         .scrollIntoView({
-            behavior:"smooth"
+            behavior: "smooth"
         });
 
+
     document
-        .querySelectorAll(".nav-btn")
+        .querySelectorAll(
+            ".nav-btn"
+        )
         .forEach(btn =>
-            btn.classList.remove("active")
+            btn.classList.remove(
+                "active"
+            )
         );
 
-    button.classList.add("active");
+
+    button.classList.add(
+        "active"
+    );
 
 }
 
@@ -2113,57 +2933,103 @@ function headURL(name) {
 
 }
 
+
 function tierClass(tier) {
 
     return tier
         .toLowerCase()
-        .replace("+","-plus");
+        .replace(
+            "+",
+            "-plus"
+        );
 
 }
+
 
 function tierOptions(selected) {
 
-    return Object.keys(tierLevels)
-        .map(tier => `
+    return Object.keys(
+        tierLevels
+    )
+    .map(tier => `
 
-            <option
-                value="${tier}"
-                ${tier === selected ? "selected" : ""}
-            >
-                ${tier}
-            </option>
+        <option
+            value="${tier}"
+            ${tier === selected
+                ? "selected"
+                : ""}
+        >
 
-        `)
-        .join("");
+            ${tier}
+
+        </option>
+
+    `)
+    .join("");
 
 }
+
 
 function escapeHTML(value) {
 
     return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 
 }
+
 
 function showToast(message) {
 
     const toast =
-        document.getElementById("toast");
+        document.getElementById(
+            "toast"
+        );
 
-    toast.textContent = message;
 
-    toast.classList.add("show");
+    toast.textContent =
+        message;
 
-    clearTimeout(window.toastTimer);
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        window.toastTimer
+    );
+
 
     window.toastTimer =
         setTimeout(() => {
 
-            toast.classList.remove("show");
+            toast.classList.remove(
+                "show"
+            );
 
         },2200);
 
@@ -2182,9 +3048,11 @@ if (loggedUsername) {
 
     document.getElementById(
         "loginScreen"
-    ).style.display = "flex";
+    ).style.display =
+        "flex";
 
 }
+
 
 document.getElementById(
     "mcUsername"
@@ -2193,7 +3061,9 @@ document.getElementById(
     event => {
 
         if (event.key === "Enter") {
+
             login();
+
         }
 
     }
