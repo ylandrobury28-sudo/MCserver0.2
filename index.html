@@ -462,33 +462,10 @@ td {
 }
 
 /* VIDEOS */
-
-.video-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-}
-
-.video-card {
-    background: rgba(17,22,34,.9);
-    border: 1px solid var(--border);
-    border-radius: 17px;
-    overflow: hidden;
-    transition: .2s;
-}
-
 .video-card:hover {
     transform: translateY(-3px);
     border-color: rgba(124,92,255,.35);
 }
-
-.video-frame {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    background: #090c13;
-}
-
 .video-frame iframe {
     position: absolute;
     inset: 0;
@@ -496,11 +473,6 @@ td {
     height: 100%;
     border: 0;
 }
-
-.video-info {
-    padding: 16px;
-}
-
 .video-info h3 {
     font-size: 16px;
     margin-bottom: 6px;
@@ -511,18 +483,6 @@ td {
     font-size: 12px;
     line-height: 1.5;
 }
-
-.video-badge {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 5px 8px;
-    border-radius: 6px;
-    background: rgba(124,92,255,.12);
-    color: #bcaeff;
-    font-size: 10px;
-    font-weight: 800;
-}
-
 /* MODAL */
 
 .modal {
@@ -722,64 +682,6 @@ td {
     font-size: 11px;
 }
 
-/* VIDEO EDITOR */
-.video-editor {
-    display: none;
-    margin-bottom: 18px;
-    padding: 16px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: rgba(255,255,255,.035);
-}
-
-.editing .video-editor {
-    display: block;
-}
-
-.video-editor h3 {
-    margin-bottom: 8px;
-}
-
-.video-editor p {
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.5;
-    margin-bottom: 14px;
-}
-
-.video-editor-grid {
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: 10px;
-}
-
-.video-editor label {
-    display: block;
-    color: var(--muted);
-    font-size: 11px;
-    margin-bottom: 5px;
-}
-
-.video-editor input {
-    width: 100%;
-    padding: 11px;
-    background: #090c13;
-    color: white;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    outline: none;
-}
-
-.video-editor input:focus {
-    border-color: var(--purple);
-}
-
-@media(max-width:600px) {
-    .video-editor-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
 @media(max-width:800px) {
     .stats {
         grid-template-columns: 1fr 1fr;
@@ -796,12 +698,7 @@ td {
     .tier-grid {
         grid-template-columns: repeat(2,1fr);
     }
-
-    .video-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .nav {
+.nav {
         flex-direction: column;
     }
 }
@@ -1107,203 +1004,6 @@ td {
 
 
     <!-- IZANARCHYMC VIDEOS -->
-
-    <section
-        class="section"
-        id="videos">
-
-        <div class="section-title">
-
-            <h2>
-                🎥 izanarchymc Videos
-            </h2>
-
-            <p>
-                Watch izanarchymc Minecraft videos and PvP content.
-            </p>
-
-        </div>
-
-
-        <div class="video-editor" id="videoEditor">
-
-            <h3>🎥 Edit Videos</h3>
-            <p>Paste a YouTube link for each video. Click <strong>Save</strong> below to publish the changes for everyone.</p>
-
-            <div class="video-editor-grid">
-                <div>
-                    <label for="video1Url">Video 1 URL</label>
-                    <input id="video1Url" placeholder="https://www.youtube.com/watch?v=...">
-                </div>
-                <div>
-                    <label for="video2Url">Video 2 URL</label>
-                    <input id="video2Url" placeholder="https://www.youtube.com/watch?v=...">
-                </div>
-                <div>
-                    <label for="video3Url">Video 3 URL</label>
-                    <input id="video3Url" placeholder="https://www.youtube.com/watch?v=...">
-                </div>
-                <div>
-                    <label for="video4Url">Video 4 URL</label>
-                    <input id="video4Url" placeholder="https://www.youtube.com/watch?v=...">
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="video-grid">
-
-
-            <!-- VIDEO 1 -->
-
-            <div class="video-card">
-
-                <div class="video-frame">
-
-                    <iframe
-                        id="videoFrame1"
-                        src="https://www.youtube.com/embed/JVj8C97vKcQ"
-                        title="izanarchymc Video 1"
-                        loading="lazy"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen>
-                    </iframe>
-
-                </div>
-
-
-                <div class="video-info">
-
-                    <h3>
-                        izanarchymc — Minecraft PvP
-                    </h3>
-
-                    <p>
-                        Minecraft PvP gameplay from izanarchymc.
-                    </p>
-
-                    <span class="video-badge">
-                        IZANARCHYMC
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- VIDEO 2 -->
-
-            <div class="video-card">
-
-                <div class="video-frame">
-<iframe
-    src="https://www.youtube.com/embed/1p9hKnr5i_Y?start=361"
-    title="izanarchymc Video 2"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    allowfullscreen>
-</iframe>
-
-                </div>
-
-
-                <div class="video-info">
-
-                    <h3>
-                        izanarchymc — PvP Highlights
-                    </h3>
-
-                    <p>
-                        Minecraft PvP highlights from izanarchymc.
-                    </p>
-
-                    <span class="video-badge">
-                        PVP HIGHLIGHTS
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- VIDEO 3 -->
-
-            <div class="video-card">
-
-                <div class="video-frame">
-
-                    <iframe
-                        id="videoFrame3"
-                        src="https://www.youtube.com/embed/YOUR_VIDEO_ID_3"
-                        title="izanarchymc Video 3"
-                        loading="lazy"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen>
-                    </iframe>
-
-                </div>
-
-
-                <div class="video-info">
-
-                    <h3>
-                        izanarchymc — Ranked
-                    </h3>
-
-                    <p>
-                        Ranked Minecraft gameplay from izanarchymc.
-                    </p>
-
-                    <span class="video-badge">
-                        RANKED
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- VIDEO 4 -->
-
-            <div class="video-card">
-
-                <div class="video-frame">
-
-                    <iframe
-                        id="videoFrame4"
-                        src="https://www.youtube.com/embed/YOUR_VIDEO_ID_4"
-                        title="izanarchymc Video 4"
-                        loading="lazy"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen>
-                    </iframe>
-
-                </div>
-
-
-                <div class="video-info">
-
-                    <h3>
-                        izanarchymc — Best Moments
-                    </h3>
-
-                    <p>
-                        More Minecraft moments from izanarchymc.
-                    </p>
-
-                    <span class="video-badge">
-                        IZANARCHYMC
-                    </span>
-
-                </div>
-
-            </div>
-
-
-        </div>
-
-    </section>
 
 
     <!-- TIERS -->
@@ -1640,7 +1340,7 @@ const EDIT_PASSWORD =
 ========================= */
 
 const SUPABASE_URL =
-    "https://vgvgfhvrfgbjaxgkjgam.supabase.co";
+    "https://vgvgfhvrfgbjaxgkjgam.supabase.co/rest/v1/";
 
 const SUPABASE_ANON_KEY =
     "sb_publishable_XH0CZjbhYSjvOAlE3DFZ9A_kZMASaRK";
@@ -1739,7 +1439,7 @@ async function loadPlayersFromDatabase() {
         const { data, error } =
             await supabaseClient
                 .from("players")
-                .select("id,name,tier,points,rank")
+                .select("id,name,tier,points")
                 .order(
                     "points",
                     { ascending: false }
@@ -1773,10 +1473,7 @@ async function loadPlayersFromDatabase() {
                 tier: player.tier,
 
                 points:
-                    Number(player.points) || 0,
-
-                rank:
-                    Number(player.rank) || 0
+                    Number(player.points) || 0
 
             }));
 
@@ -1817,7 +1514,7 @@ async function replacePlayersInDatabase(list) {
 
 
     const rows =
-        list.map((player, index) => ({
+        list.map(player => ({
 
             name:
                 String(player.name).trim(),
@@ -1829,10 +1526,7 @@ async function replacePlayersInDatabase(list) {
                 Math.max(
                     0,
                     Number(player.points) || 0
-                ),
-
-            rank:
-                index + 1
+                )
 
         }));
 
@@ -1851,100 +1545,6 @@ async function replacePlayersInDatabase(list) {
     if (insertError)
         throw insertError;
 
-}
-
-
-/* =========================
-   VIDEO SETTINGS
-========================= */
-
-const defaultVideos = [
-    "https://www.youtube.com/watch?v=JVj8C97vKcQ",
-    "https://www.youtube.com/watch?v=1p9hKnr5i_Y&t=361s",
-    "https://www.youtube.com/watch?v=JVj8C97vKcQ",
-    "https://www.youtube.com/watch?v=JVj8C97vKcQ"
-];
-
-let videoURLs = [...defaultVideos];
-
-function youtubeEmbedURL(value) {
-    const raw = String(value || "").trim();
-    if (!raw) return "";
-
-    try {
-        const url = new URL(raw);
-        let id = "";
-
-        if (url.hostname.includes("youtu.be")) {
-            id = url.pathname.replace(/^\//, "").split("/")[0];
-        } else if (url.hostname.includes("youtube.com")) {
-            if (url.pathname === "/watch") id = url.searchParams.get("v") || "";
-            else if (url.pathname.startsWith("/embed/")) id = url.pathname.split("/")[2] || "";
-            else if (url.pathname.startsWith("/shorts/")) id = url.pathname.split("/")[2] || "";
-        }
-
-        if (!/^[A-Za-z0-9_-]{6,20}$/.test(id)) return "";
-        return "https://www.youtube.com/embed/" + id;
-    } catch {
-        return "";
-    }
-}
-
-function renderVideos() {
-    videoURLs.forEach((url, index) => {
-        const frame = document.getElementById("videoFrame" + (index + 1));
-        if (frame) frame.src = youtubeEmbedURL(url) || "about:blank";
-        const input = document.getElementById("video" + (index + 1) + "Url");
-        if (input && document.activeElement !== input) input.value = url;
-    });
-}
-
-async function loadVideoSettings() {
-    try {
-        const { data, error } = await supabaseClient
-            .from("site_settings")
-            .select("key,value")
-            .eq("key", "video_urls")
-            .maybeSingle();
-
-        if (error) throw error;
-
-        if (data && data.value) {
-            const parsed = JSON.parse(data.value);
-            if (Array.isArray(parsed) && parsed.length >= 4) {
-                videoURLs = parsed.slice(0, 4).map(v => String(v || ""));
-            }
-        }
-    } catch (error) {
-        console.warn("Video settings could not be loaded:", error);
-        showToast("⚠️ Video settings table not ready");
-    }
-
-    renderVideos();
-}
-
-async function saveVideoSettings() {
-    const next = [1,2,3,4].map(i =>
-        document.getElementById("video" + i + "Url").value.trim()
-    );
-
-    for (const url of next) {
-        if (!youtubeEmbedURL(url)) {
-            throw new Error("Every video must be a valid YouTube URL.");
-        }
-    }
-
-    const { error } = await supabaseClient
-        .from("site_settings")
-        .upsert({
-            key: "video_urls",
-            value: JSON.stringify(next)
-        }, { onConflict: "key" });
-
-    if (error) throw error;
-
-    videoURLs = next;
-    renderVideos();
 }
 
 
@@ -2033,7 +1633,6 @@ async function showWebsite() {
 
 
     await loadPlayersFromDatabase();
-    await loadVideoSettings();
 
 
     renderAll();
@@ -2893,10 +2492,8 @@ async function saveData() {
             players
         );
 
-        await saveVideoSettings();
 
         await loadPlayersFromDatabase();
-        await loadVideoSettings();
 
 
         renderAll();
