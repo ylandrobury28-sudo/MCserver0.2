@@ -151,6 +151,17 @@ button:focus-visible, input:focus-visible, select:focus-visible {
     margin-bottom: 22px;
 }
 
+.field-label {
+    display: block;
+    text-align: left;
+    color: var(--text-dim);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin: 0 0 6px 2px;
+}
+
 .login-input, .modal-input {
     width: 100%;
     margin-bottom: 14px;
@@ -188,6 +199,11 @@ input:focus, select:focus {
     border-color: rgba(78, 224, 138, 0.5);
     background: rgba(255,255,255,0.05);
     box-shadow: 0 0 0 3px var(--emerald-soft);
+}
+
+select option {
+    background: #14181f;
+    color: var(--text);
 }
 
 button {
@@ -319,6 +335,15 @@ button {
     border-color: var(--gold);
 }
 
+/* Admin-only controls: hidden until edit mode is unlocked */
+.editing-only {
+    display: none;
+}
+
+body.editing .editing-only {
+    display: inline-flex;
+}
+
 /* ==========================================================================
    LAYOUT / HERO
    ========================================================================== */
@@ -425,6 +450,15 @@ button {
 .section {
     margin-bottom: 56px;
     scroll-margin-top: 90px;
+}
+
+/* Submissions log: admin/owner only */
+#submissionsSection {
+    display: none;
+}
+
+body.editing #submissionsSection {
+    display: block;
 }
 
 .section-title {
@@ -935,10 +969,11 @@ tbody tr td:last-child { border-right: 1px solid transparent; border-radius: 0 1
         <h1>Welcome to MC Ranked</h1>
 
         <p>
-            Enter your Minecraft username to continue.
-            Your username is used to load your Minecraft player head.
+            Before you can enter the board, tell us who you are.
+            This info (plus a timestamp) is only visible to admins/owner.
         </p>
 
+        <label class="field-label" for="mcUsername">Minecraft username</label>
         <input
             id="mcUsername"
             class="login-input"
@@ -946,6 +981,21 @@ tbody tr td:last-child { border-right: 1px solid transparent; border-radius: 0 1
             maxlength="16"
             autocomplete="off"
         >
+
+        <label class="field-label" for="mcDiscord">Discord / MC name</label>
+        <input
+            id="mcDiscord"
+            class="login-input"
+            placeholder="Discord username or MC name"
+            maxlength="32"
+            autocomplete="off"
+        >
+
+        <label class="field-label" for="mcTier">Your tier</label>
+        <select id="mcTier" class="login-input"></select>
+
+        <label class="field-label" for="mcTimezone">Your timezone</label>
+        <select id="mcTimezone" class="login-input"></select>
 
         <button class="login-button" onclick="login()">
             Continue
@@ -989,6 +1039,12 @@ tbody tr td:last-child { border-right: 1px solid transparent; border-radius: 0 1
                 class="nav-btn"
                 onclick="goTo('tiers',this)">
                 Tier List
+            </button>
+
+            <button
+                class="nav-btn editing-only"
+                onclick="goTo('submissionsSection',this)">
+                🔒 Submissions
             </button>
 
         </div>
@@ -1169,6 +1225,49 @@ tbody tr td:last-child { border-right: 1px solid transparent; border-radius: 0 1
 
     </section>
 
+    <!-- SUBMISSIONS LOG (admin/owner only) -->
+
+    <section class="section" id="submissionsSection">
+
+        <div class="section-title">
+            <h2>🔒 Login Submissions</h2>
+            <p>Admin/owner only — tier, timezone, Discord/MC name and timestamp for everyone who has logged in.</p>
+        </div>
+
+        <div class="panel">
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Discord / MC</th>
+                            <th>Tier</th>
+                            <th>Timezone</th>
+                            <th>Submitted</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="submissionsTable">
+                        <tr>
+                            <td colspan="5">
+                                <div style="text-align:center;padding:35px;color:#8b93a3;">
+                                    No submissions loaded yet.
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
     <div class="footer">
         MC Ranked • Welcome <span id="footerUsername"></span>
     </div>
@@ -1185,7 +1284,7 @@ tbody tr td:last-child { border-right: 1px solid transparent; border-radius: 0 1
 
         <p>
             Enter the edit password to modify players, ranks,
-            tiers and points.
+            tiers and points — and to view login submissions.
         </p>
 
         <input
@@ -1326,7 +1425,19 @@ tbody tr td:last-child { border-right: 1px solid transparent; border-radius: 0 1
     and anyone can call the Supabase REST API
     directly with the anon key below, bypassing
     this UI entirely, unless you add RLS write
-    policies on the "players" table.
+    policies on the "players" and "submissions"
+    tables.
+
+    That same limitation applies to the new
+    "submissions" log below: hiding the section
+    behind this password keeps it out of the
+    normal UI for normal players, but it is NOT
+    real access control, because the anon key
+    is public. If you actually need submissions
+    to be unreadable by anyone but you, you must
+    add a Supabase RLS policy that only allows
+    SELECT on "submissions" for an authenticated
+    admin user (not the anon role).
 */
 const EDIT_PASSWORD = "DeconnectSMPIzanarchySaikyoX8**";
 
@@ -1341,6 +1452,33 @@ const supabaseClient = supabase.createClient(
     SUPABASE_URL,
     SUPABASE_ANON_KEY
 );
+
+/*
+    SUPABASE SETUP — run once in the SQL editor:
+
+    create table if not exists submissions (
+        id bigint generated by default as identity primary key,
+        mc_username text not null,
+        discord_name text not null,
+        tier text not null,
+        timezone text not null,
+        created_at timestamptz not null default now()
+    );
+
+    -- allow the login form (anon key) to insert new submissions:
+    alter table submissions enable row level security;
+
+    create policy "anyone can insert a submission"
+        on submissions for insert
+        to anon
+        with check (true);
+
+    -- only allow reading submissions back out for admins.
+    -- with the anon key alone there is no real "admin" identity,
+    -- so if you need this locked server-side, read submissions
+    -- through a server function / service-role key instead of
+    -- straight from the browser.
+*/
 
 
 /* =========================
@@ -1407,6 +1545,7 @@ const tierLevels = {
 };
 
 let players = [];
+let submissions = [];
 
 let loggedUsername =
     localStorage.getItem("mcRankedUsername");
@@ -1481,17 +1620,123 @@ async function replacePlayersInDatabase(list) {
     if (insertError) throw insertError;
 }
 
+async function insertSubmission(submission) {
+
+    try {
+
+        const { error } = await supabaseClient
+            .from("submissions")
+            .insert([{
+                mc_username: submission.mc_username,
+                discord_name: submission.discord_name,
+                tier: submission.tier,
+                timezone: submission.timezone
+                // created_at is set by the database default (now())
+            }]);
+
+        if (error) throw error;
+
+    } catch (error) {
+
+        console.error("Supabase submission error:", error);
+
+        // Don't block the player from entering just because the
+        // admin-only log failed to save.
+        showToast("⚠️ Could not save your submission info");
+
+    }
+
+}
+
+async function loadSubmissions() {
+
+    try {
+
+        const { data, error } = await supabaseClient
+            .from("submissions")
+            .select("id,mc_username,discord_name,tier,timezone,created_at")
+            .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        submissions = data || [];
+
+    } catch (error) {
+
+        console.error("Supabase submissions load error:", error);
+
+        submissions = [];
+
+        showToast("⚠️ Could not load submissions");
+
+    }
+
+}
+
 /* =========================
    LOGIN
 ========================= */
 
-function login() {
+function populateLoginSelects() {
 
-    const input =
+    document.getElementById("mcTier").innerHTML =
+        tierOptions("A+");
+
+    document.getElementById("mcTimezone").innerHTML =
+        timezoneOptions();
+
+}
+
+function timezoneOptions() {
+
+    const zones = [];
+
+    for (let offset = -12; offset <= 14; offset++) {
+
+        const label =
+            offset === 0
+            ? "UTC"
+            : "UTC" + (offset > 0 ? "+" : "") + offset;
+
+        zones.push(label);
+
+    }
+
+    return zones.map(zone => `
+
+        <option value="${zone}">
+            ${zone}
+        </option>
+
+    `).join("");
+
+}
+
+async function login() {
+
+    const usernameInput =
         document.getElementById("mcUsername");
 
+    const discordInput =
+        document.getElementById("mcDiscord");
+
+    const tierInput =
+        document.getElementById("mcTier");
+
+    const timezoneInput =
+        document.getElementById("mcTimezone");
+
     const username =
-        input.value.trim();
+        usernameInput.value.trim();
+
+    const discordName =
+        discordInput.value.trim();
+
+    const tier =
+        tierInput.value;
+
+    const timezone =
+        timezoneInput.value;
 
     const error =
         document.getElementById("loginError");
@@ -1512,12 +1757,49 @@ function login() {
         return;
     }
 
+    if (!discordName) {
+
+        error.textContent =
+            "Please enter your Discord / MC name.";
+
+        return;
+    }
+
+    if (!tier) {
+
+        error.textContent =
+            "Please select your tier.";
+
+        return;
+    }
+
+    if (!timezone) {
+
+        error.textContent =
+            "Please select your timezone.";
+
+        return;
+    }
+
+    error.textContent = "";
+
     loggedUsername = username;
 
     localStorage.setItem(
         "mcRankedUsername",
         username
     );
+
+    const submission = {
+        mc_username: username,
+        discord_name: discordName,
+        tier: tier,
+        timezone: timezone
+    };
+
+    // Save the admin-only submission record, then let the player in.
+    // We don't block entry on this succeeding — see insertSubmission().
+    await insertSubmission(submission);
 
     showWebsite();
 
@@ -1583,7 +1865,7 @@ function requestEditMode() {
 
 }
 
-function verifyEditPassword() {
+async function verifyEditPassword() {
 
     const password =
         document.getElementById(
@@ -1626,6 +1908,12 @@ function verifyEditPassword() {
     showToast("🔓 Edit mode unlocked");
 
     renderAll();
+
+    // Only load/show the admin-only submissions log once the
+    // edit password has been verified.
+    await loadSubmissions();
+
+    renderSubmissions();
 
 }
 
@@ -1952,6 +2240,81 @@ function renderTable() {
                         View →
                     </button>
 
+                </td>
+
+            </tr>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* =========================
+   SUBMISSIONS (admin/owner only)
+========================= */
+
+function renderSubmissions() {
+
+    const tbody =
+        document.getElementById("submissionsTable");
+
+    if (!tbody) return;
+
+    if (!submissions.length) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5">
+                    <div style="
+                        text-align:center;
+                        padding:35px;
+                        color:#8b93a3;
+                    ">
+                        No submissions yet.
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    tbody.innerHTML =
+        submissions.map(entry => {
+
+            const timestamp =
+                entry.created_at
+                ? new Date(entry.created_at).toLocaleString()
+                : "—";
+
+            return `
+
+            <tr class="player-row">
+
+                <td>
+                    <strong>${escapeHTML(entry.mc_username)}</strong>
+                </td>
+
+                <td>
+                    ${escapeHTML(entry.discord_name)}
+                </td>
+
+                <td>
+                    <span class="tier ${tierClass(entry.tier)}">
+                        ${entry.tier}
+                    </span>
+                </td>
+
+                <td>
+                    ${escapeHTML(entry.timezone)}
+                </td>
+
+                <td>
+                    <span style="color:#8b93a3">
+                        ${timestamp}
+                    </span>
                 </td>
 
             </tr>
@@ -2434,6 +2797,8 @@ function showToast(message) {
 /* =========================
    STARTUP
 ========================= */
+
+populateLoginSelects();
 
 if (loggedUsername) {
 
