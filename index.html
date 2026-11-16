@@ -1,2831 +1,638 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MC Ranked</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Ylandro Bury | Belgium #11</title>
 
 <style>
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-
-/* ==========================================================================
-   MC RANKED — theme tokens
-   ========================================================================== */
 
 :root {
-    --bg: #0a0c10;
-    --bg-glow-1: rgba(78, 224, 138, 0.07);
-    --bg-glow-2: rgba(255, 92, 92, 0.05);
-
-    --panel: rgba(20, 24, 31, 0.86);
-    --panel-soft: rgba(255, 255, 255, 0.03);
-    --panel-hover: rgba(26, 31, 40, 0.95);
-
-    --border: rgba(255, 255, 255, 0.08);
-    --border-strong: rgba(255, 255, 255, 0.16);
-
-    --emerald: #4ee08a;
-    --emerald-soft: rgba(78, 224, 138, 0.12);
-    --gold: #f2c14e;
-
-    --text: #eef1f6;
-    --text-muted: #8b93a3;
-    --text-dim: #565f6d;
-
-    --radius-lg: 18px;
-    --radius: 12px;
-    --radius-sm: 8px;
-
-    --shadow: 0 20px 55px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255,255,255,0.02);
-    --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-
-    --font-head: 'Sora', sans-serif;
-    --font-body: 'Inter', sans-serif;
-
-    /* tier heat-map, best -> worst */
-    --t-aplus: #ff5c5c;
-    --t-a:     #ff8c4c;
-    --t-bplus: #ffb347;
-    --t-b:     #f2c14e;
-    --t-cplus: #d9d24c;
-    --t-c:     #8bd45c;
-    --t-dplus: #57c2c9;
-    --t-d:     #5b9bf0;
-    --t-eplus: #8c8ff0;
-    --t-e:     #7c8494;
+  --black: #080808;
+  --yellow: #fddd00;
+  --red: #ed1c24;
+  --white: #ffffff;
+  --grey: #a5a5a5;
 }
-
-html { scroll-behavior: smooth; }
 
 body {
-    min-height: 100vh;
-    background:
-        radial-gradient(circle at 12% 8%, var(--bg-glow-1), transparent 32%),
-        radial-gradient(circle at 88% 88%, var(--bg-glow-2), transparent 32%),
-        var(--bg);
-    color: var(--text);
-    font-family: var(--font-body);
-    -webkit-font-smoothing: antialiased;
-    line-height: 1.5;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--black);
+  color: white;
 }
 
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background-image:
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 42px 42px;
-    mask-image: linear-gradient(to bottom, black, transparent 85%);
-    pointer-events: none;
+/* BELGIUM STRIPES */
+
+.flag-stripe {
+  height: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
-h1, h2, h3 { font-family: var(--font-head); }
+.flag-stripe div:nth-child(1) { background: black; }
+.flag-stripe div:nth-child(2) { background: var(--yellow); }
+.flag-stripe div:nth-child(3) { background: var(--red); }
 
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: #262c37; border-radius: 999px; }
-::-webkit-scrollbar-thumb:hover { background: #37404f; }
+/* NAVIGATION */
 
-button:focus-visible, input:focus-visible, select:focus-visible {
-    outline: 2px solid var(--emerald);
-    outline-offset: 2px;
+nav {
+  padding: 22px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #101010;
 }
 
-/* ==========================================================================
-   LOGIN
-   ========================================================================== */
-
-.login-screen {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 24px;
+.brand {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 2px;
 }
 
-.login-box {
-    width: 100%;
-    max-width: 380px;
-    padding: 40px 34px;
-    text-align: center;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
-    backdrop-filter: blur(16px);
+.brand span {
+  color: var(--yellow);
 }
 
-.login-logo {
-    width: 56px;
-    height: 56px;
-    margin: 0 auto 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.6rem;
-    background: linear-gradient(145deg, var(--emerald-soft), transparent);
-    border: 1px solid rgba(78, 224, 138, 0.35);
-    border-radius: var(--radius);
+.nav-right {
+  color: var(--grey);
+  font-size: 12px;
+  letter-spacing: 2px;
 }
 
-.login-box h1 {
-    font-size: 1.4rem;
-    margin-bottom: 10px;
-    letter-spacing: -0.3px;
-}
-
-.login-box p {
-    color: var(--text-muted);
-    font-size: 0.88rem;
-    margin-bottom: 22px;
-}
-
-.field-label {
-    display: block;
-    text-align: left;
-    color: var(--text-dim);
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    margin: 0 0 6px 2px;
-}
-
-.login-input, .modal-input {
-    width: 100%;
-    margin-bottom: 14px;
-}
-
-.login-button {
-    width: 100%;
-}
-
-.login-error {
-    min-height: 18px;
-    margin-top: 10px;
-    color: var(--t-aplus);
-    font-size: 0.82rem;
-}
-
-/* ==========================================================================
-   SHARED FORM CONTROLS
-   ========================================================================== */
-
-input, select {
-    padding: 11px 14px;
-    background: rgba(255,255,255,0.035);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    outline: none;
-    font: inherit;
-    transition: var(--transition);
-}
-
-input::placeholder { color: var(--text-dim); }
-
-input:focus, select:focus {
-    border-color: rgba(78, 224, 138, 0.5);
-    background: rgba(255,255,255,0.05);
-    box-shadow: 0 0 0 3px var(--emerald-soft);
-}
-
-select option {
-    background: #14181f;
-    color: var(--text);
-}
-
-button {
-    font: inherit;
-    cursor: pointer;
-    border: none;
-}
-
-.login-button, .confirm, .add-player, .save {
-    padding: 12px 22px;
-    background: linear-gradient(135deg, var(--emerald), #35b56e);
-    color: #06170e;
-    font-weight: 700;
-    border-radius: var(--radius-sm);
-    box-shadow: 0 8px 20px rgba(78, 224, 138, 0.18);
-    transition: var(--transition);
-}
-
-.login-button:hover, .confirm:hover, .add-player:hover, .save:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(78, 224, 138, 0.28);
-}
-
-.cancel, .reset, .close {
-    padding: 12px 22px;
-    background: rgba(255,255,255,0.05);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-weight: 600;
-    transition: var(--transition);
-}
-
-.cancel:hover, .reset:hover, .close:hover {
-    background: rgba(255,255,255,0.09);
-    border-color: var(--border-strong);
-}
-
-.reset { background: rgba(255, 92, 92, 0.1); border-color: rgba(255, 92, 92, 0.35); color: #ff9a9a; }
-.reset:hover { background: rgba(255, 92, 92, 0.18); }
-
-/* ==========================================================================
-   HEADER / NAV
-   ========================================================================== */
-
-.header {
-    position: sticky;
-    top: 0;
-    z-index: 40;
-    padding: 16px 28px;
-    background: rgba(9, 11, 15, 0.75);
-    border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(14px);
-}
-
-.nav {
-    max-width: 1250px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: var(--font-head);
-    font-weight: 800;
-    font-size: 1.05rem;
-    letter-spacing: 0.4px;
-}
-
-.logo-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    background: linear-gradient(145deg, var(--emerald-soft), transparent);
-    border: 1px solid rgba(78, 224, 138, 0.35);
-    border-radius: 8px;
-    color: var(--emerald);
-}
-
-.nav-buttons {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.nav-btn {
-    padding: 9px 16px;
-    background: transparent;
-    color: var(--text-muted);
-    border: 1px solid transparent;
-    border-radius: var(--radius-sm);
-    font-weight: 600;
-    font-size: 0.88rem;
-    transition: var(--transition);
-}
-
-.nav-btn:hover {
-    color: var(--text);
-    background: var(--panel-soft);
-}
-
-.nav-btn.active {
-    color: var(--text);
-    background: var(--panel-soft);
-    border-color: var(--border);
-}
-
-.edit-btn {
-    color: var(--gold);
-    border-color: rgba(242, 193, 78, 0.3);
-    margin-right: 6px;
-}
-
-.edit-btn:hover {
-    background: rgba(242, 193, 78, 0.1);
-}
-
-.edit-btn.editing {
-    color: #06170e;
-    background: var(--gold);
-    border-color: var(--gold);
-}
-
-/* Admin-only controls: hidden until edit mode is unlocked */
-.editing-only {
-    display: none;
-}
-
-body.editing .editing-only {
-    display: inline-flex;
-}
-
-/* ==========================================================================
-   LAYOUT / HERO
-   ========================================================================== */
-
-.container {
-    max-width: 1250px;
-    margin: 0 auto;
-    padding: 48px 24px 120px;
-}
+/* HERO */
 
 .hero {
-    max-width: 640px;
-    margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+  min-height: 560px;
+  padding: 75px 8%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background:
+    linear-gradient(90deg, #080808 5%, #151515 65%, #650b10 100%);
 }
 
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 14px;
-    margin-bottom: 18px;
-    background: var(--emerald-soft);
-    border: 1px solid rgba(78, 224, 138, 0.3);
-    border-radius: 999px;
-    color: var(--emerald);
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.3px;
+.hero::after {
+  content: "BELGIUM";
+  position: absolute;
+  right: -30px;
+  bottom: 10px;
+  font-size: clamp(70px, 15vw, 180px);
+  font-weight: 900;
+  color: rgba(255,255,255,.035);
+  pointer-events: none;
 }
 
-.hero h1 {
-    font-size: clamp(2rem, 4vw, 2.9rem);
-    font-weight: 800;
-    letter-spacing: -1px;
-    line-height: 1.1;
-    margin-bottom: 14px;
+.hero-content {
+  position: relative;
+  z-index: 2;
 }
 
-.hero h1 .gradient {
-    background: linear-gradient(120deg, var(--emerald), var(--gold));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+.country {
+  color: var(--yellow);
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 5px;
 }
 
-.hero p {
-    color: var(--text-muted);
-    font-size: 1rem;
+h1 {
+  font-size: clamp(55px, 9vw, 110px);
+  font-weight: 1000;
+  line-height: .88;
+  margin: 28px 0;
+  letter-spacing: -4px;
 }
 
-.hero p strong {
-    color: var(--emerald);
+.position {
+  color: #ddd;
+  font-size: 19px;
+  font-weight: bold;
+  letter-spacing: 3px;
 }
 
-/* ==========================================================================
-   STATS
-   ========================================================================== */
-
-.stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    margin-bottom: 44px;
+.hero-tag {
+  margin-top: 28px;
+  display: inline-block;
+  padding: 12px 17px;
+  background: var(--yellow);
+  color: black;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 2px;
 }
 
-.stat {
-    position: relative;
-    overflow: hidden;
-    padding: 22px 24px;
-    background: linear-gradient(145deg, rgba(255,255,255,0.03), transparent 60%), var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
-    backdrop-filter: blur(14px);
-    transition: var(--transition);
+.shirt-number {
+  position: relative;
+  z-index: 2;
+  font-size: clamp(130px, 23vw, 270px);
+  font-weight: 1000;
+  line-height: 1;
+  color: var(--yellow);
+  text-shadow: 8px 8px 0 rgba(0,0,0,.3);
 }
 
-.stat:hover {
-    transform: translateY(-4px);
-    background: var(--panel-hover);
-    border-color: rgba(78, 224, 138, 0.3);
+/* BELGIAN COLOR BAND */
+
+.color-band {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  height: 7px;
 }
 
-.stat-label {
-    color: var(--text-dim);
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
+.color-band div:nth-child(1) { background: black; }
+.color-band div:nth-child(2) { background: var(--yellow); }
+.color-band div:nth-child(3) { background: var(--red); }
+
+/* MAIN */
+
+main {
+  max-width: 1250px;
+  margin: auto;
+  padding: 55px 6%;
 }
 
-.stat-value {
-    font-family: var(--font-head);
-    font-size: clamp(1.5rem, 2.6vw, 1.9rem);
-    font-weight: 700;
-    letter-spacing: -0.5px;
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 25px;
+  font-size: 23px;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
-/* ==========================================================================
-   SECTIONS
-   ========================================================================== */
-
-.section {
-    margin-bottom: 56px;
-    scroll-margin-top: 90px;
+.section-header::before {
+  content: "";
+  height: 27px;
+  width: 7px;
+  background: var(--yellow);
 }
 
-/* Submissions log: admin/owner only */
-#submissionsSection {
-    display: none;
+.section-header span {
+  color: var(--red);
 }
 
-body.editing #submissionsSection {
-    display: block;
+/* PLAYER INFO */
+
+.player-info {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 55px;
 }
 
-.section-title {
-    margin-bottom: 20px;
+.info-card {
+  background: #161616;
+  border-top: 3px solid var(--yellow);
+  padding: 22px;
 }
 
-.section-title h2 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-    margin-bottom: 4px;
+.info-card strong {
+  display: block;
+  font-size: 27px;
+  font-weight: 900;
 }
 
-.section-title p {
-    color: var(--text-muted);
-    font-size: 0.9rem;
+.info-card small {
+  color: var(--grey);
+  font-size: 11px;
+  letter-spacing: 2px;
 }
 
-.panel {
-    padding: 26px;
-    background: linear-gradient(145deg, rgba(255,255,255,0.03), transparent 45%), var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
-    backdrop-filter: blur(16px);
+/* STATS */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 13px;
+  margin-bottom: 55px;
 }
 
-.search-wrap {
-    margin-bottom: 18px;
+.stat-card {
+  background: linear-gradient(145deg,#1d1d1d,#101010);
+  padding: 25px 20px;
+  border-left: 3px solid var(--red);
 }
 
-.search {
-    width: 100%;
-    max-width: 360px;
+.stat-card strong {
+  display: block;
+  color: var(--yellow);
+  font-size: 33px;
+  font-weight: 900;
 }
 
-.table-wrap {
-    overflow-x: auto;
+.stat-card p {
+  color: var(--grey);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  margin-top: 8px;
 }
 
-/* ==========================================================================
-   TABLE
-   ========================================================================== */
+/* SKILLS */
 
-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 7px;
-    text-align: left;
-    min-width: 640px;
+.skill-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 55px;
 }
 
-thead th {
-    padding: 8px 14px;
-    color: var(--text-dim);
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 1.1px;
-    text-transform: uppercase;
+.skill-panel {
+  background: #151515;
+  padding: 28px;
+  border-top: 3px solid var(--yellow);
 }
 
-tbody td {
-    padding: 14px;
-    background: rgba(255,255,255,0.02);
-    font-size: 0.92rem;
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-    transition: var(--transition);
+.skill-panel h3 {
+  margin-bottom: 25px;
+  font-size: 17px;
+  letter-spacing: 2px;
 }
 
-tbody tr td:first-child { border-left: 1px solid transparent; border-radius: 10px 0 0 10px; }
-tbody tr td:last-child { border-right: 1px solid transparent; border-radius: 0 10px 10px 0; }
-
-.player-row:hover td {
-    background: var(--emerald-soft);
-    border-top-color: rgba(78, 224, 138, 0.2);
-    border-bottom-color: rgba(78, 224, 138, 0.2);
-}
-.player-row:hover td:first-child { border-left-color: rgba(78, 224, 138, 0.2); }
-.player-row:hover td:last-child { border-right-color: rgba(78, 224, 138, 0.2); }
-
-.player {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    min-width: 170px;
+.skill {
+  margin: 22px 0;
 }
 
-.head {
-    width: 36px;
-    height: 36px;
-    flex: 0 0 36px;
-    border: 1px solid var(--border-strong);
-    border-radius: 8px;
-    image-rendering: pixelated;
-    background: #1b1f28;
+.skill-title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 10px;
 }
 
-.player-name {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 700;
+.skill-title b {
+  color: var(--yellow);
 }
 
-.you {
-    padding: 2px 8px;
-    background: var(--emerald-soft);
-    color: var(--emerald);
-    border: 1px solid rgba(78, 224, 138, 0.35);
-    border-radius: 999px;
-    font-size: 0.62rem;
-    font-weight: 800;
-    letter-spacing: 0.5px;
+.bar {
+  background: #333;
+  height: 7px;
+  overflow: hidden;
 }
 
-.small-btn {
-    padding: 6px 11px;
-    margin-right: 4px;
-    background: rgba(255,255,255,0.05);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 0.78rem;
-    font-weight: 600;
-    transition: var(--transition);
+.fill {
+  height: 100%;
+  background: linear-gradient(90deg,var(--yellow),var(--red));
 }
 
-.small-btn:hover {
-    background: rgba(255,255,255,0.1);
-    border-color: var(--border-strong);
+/* PLAYING STYLE */
+
+.style-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 55px;
 }
 
-.edit-field {
-    width: 100%;
-    min-width: 70px;
-    padding: 8px 10px;
-    font-size: 0.88rem;
+.style-card {
+  padding: 30px;
+  background: #171717;
+  border-bottom: 4px solid var(--red);
 }
 
-.add-player {
-    margin-top: 18px;
+.style-card:first-child {
+  border-bottom-color: var(--yellow);
 }
 
-/* ==========================================================================
-   TIER BADGE (shared by table + podium + profile + tier list)
-   ========================================================================== */
-
-.tier {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 52px;
-    padding: 5px 11px;
-    border-radius: 7px;
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.4px;
+.style-card h3 {
+  font-size: 23px;
+  margin-bottom: 12px;
 }
 
-.a-plus { color: var(--t-aplus); background: color-mix(in srgb, var(--t-aplus) 16%, transparent); border: 1px solid color-mix(in srgb, var(--t-aplus) 45%, transparent); }
-.a      { color: var(--t-a);     background: color-mix(in srgb, var(--t-a) 16%, transparent);     border: 1px solid color-mix(in srgb, var(--t-a) 45%, transparent); }
-.b-plus { color: var(--t-bplus); background: color-mix(in srgb, var(--t-bplus) 16%, transparent); border: 1px solid color-mix(in srgb, var(--t-bplus) 45%, transparent); }
-.b      { color: var(--t-b);     background: color-mix(in srgb, var(--t-b) 16%, transparent);     border: 1px solid color-mix(in srgb, var(--t-b) 45%, transparent); }
-.c-plus { color: var(--t-cplus); background: color-mix(in srgb, var(--t-cplus) 16%, transparent); border: 1px solid color-mix(in srgb, var(--t-cplus) 45%, transparent); }
-.c      { color: var(--t-c);     background: color-mix(in srgb, var(--t-c) 16%, transparent);     border: 1px solid color-mix(in srgb, var(--t-c) 45%, transparent); }
-.d-plus { color: var(--t-dplus); background: color-mix(in srgb, var(--t-dplus) 16%, transparent); border: 1px solid color-mix(in srgb, var(--t-dplus) 45%, transparent); }
-.d      { color: var(--t-d);     background: color-mix(in srgb, var(--t-d) 16%, transparent);     border: 1px solid color-mix(in srgb, var(--t-d) 45%, transparent); }
-.e-plus { color: var(--t-eplus); background: color-mix(in srgb, var(--t-eplus) 16%, transparent); border: 1px solid color-mix(in srgb, var(--t-eplus) 45%, transparent); }
-.e      { color: var(--t-e);     background: color-mix(in srgb, var(--t-e) 16%, transparent);     border: 1px solid color-mix(in srgb, var(--t-e) 45%, transparent); }
-
-/* ==========================================================================
-   PODIUM
-   ========================================================================== */
-
-.podium {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    align-items: end;
-    gap: 16px;
+.style-card p {
+  color: #aaa;
+  line-height: 1.7;
+  font-size: 14px;
 }
 
-.podium-card {
-    padding: 26px 18px;
-    text-align: center;
-    background: linear-gradient(145deg, rgba(255,255,255,0.03), transparent 55%), var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
-    cursor: pointer;
-    transition: var(--transition);
+.style-label {
+  color: var(--yellow);
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 3px;
+  margin-bottom: 13px;
 }
 
-.podium-card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(78, 224, 138, 0.3);
+/* SCOUT REPORT */
+
+.report {
+  padding: 32px;
+  background: #151515;
+  border-left: 5px solid var(--yellow);
+  margin-bottom: 45px;
 }
 
-.podium-card img {
-    width: 56px;
-    height: 56px;
-    margin: 14px auto;
-    display: block;
-    border-radius: 10px;
-    border: 1px solid var(--border-strong);
-    image-rendering: pixelated;
+.report p {
+  color: #bbb;
+  line-height: 1.9;
+  font-size: 15px;
 }
 
-.podium-card h3 {
-    font-size: 1rem;
-    font-weight: 700;
+.final-banner {
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(100deg,#111,#3e090c,#111);
+  border-top: 4px solid var(--yellow);
+  border-bottom: 4px solid var(--red);
 }
 
-.podium-card.first {
-    padding-top: 34px;
-    border-color: rgba(242, 193, 78, 0.4);
-    box-shadow: var(--shadow), 0 0 30px rgba(242, 193, 78, 0.08);
+.final-banner h2 {
+  font-size: clamp(25px,5vw,43px);
+  font-weight: 900;
 }
 
-.podium-card.first img {
-    width: 68px;
-    height: 68px;
+.final-banner p {
+  color: var(--yellow);
+  margin-top: 12px;
+  letter-spacing: 3px;
+  font-size: 12px;
 }
 
-/* ==========================================================================
-   TIER LIST GRID
-   ========================================================================== */
+/* FOOTER */
 
-.tier-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
+footer {
+  padding: 30px;
+  text-align: center;
+  background: #080808;
+  color: #777;
+  font-size: 11px;
+  letter-spacing: 2px;
 }
 
-.tier-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 20px 10px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    transition: var(--transition);
+footer span {
+  color: var(--yellow);
 }
 
-.tier-box:hover {
-    transform: translateY(-3px);
-    border-color: var(--border-strong);
-}
+@media(max-width:700px) {
+  .hero {
+    min-height: 430px;
+    padding: 55px 7%;
+  }
 
-.tier-box strong {
-    font-family: var(--font-head);
-    font-size: 1.2rem;
-    font-weight: 700;
-}
+  .shirt-number {
+    font-size: 110px;
+  }
 
-.tier-box span {
-    color: var(--text-dim);
-    font-size: 0.72rem;
-    letter-spacing: 0.5px;
-}
-
-.tier-box:nth-child(1) strong,
-.tier-box:nth-child(2) strong { color: var(--t-aplus); }
-.tier-box:nth-child(2) strong { color: var(--t-a); }
-.tier-box:nth-child(3) strong { color: var(--t-bplus); }
-.tier-box:nth-child(4) strong { color: var(--t-b); }
-.tier-box:nth-child(5) strong { color: var(--t-cplus); }
-.tier-box:nth-child(6) strong { color: var(--t-c); }
-.tier-box:nth-child(7) strong { color: var(--t-dplus); }
-.tier-box:nth-child(8) strong { color: var(--t-d); }
-.tier-box:nth-child(9) strong { color: var(--t-eplus); }
-.tier-box:nth-child(10) strong { color: var(--t-e); }
-
-/* ==========================================================================
-   FOOTER
-   ========================================================================== */
-
-.footer {
-    text-align: center;
-    padding-top: 20px;
-    color: var(--text-dim);
-    font-size: 0.82rem;
-    border-top: 1px solid var(--border);
-}
-
-.footer span {
-    color: var(--text-muted);
-    font-weight: 600;
-}
-
-/* ==========================================================================
-   MODALS
-   ========================================================================== */
-
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: rgba(6, 8, 11, 0.72);
-    backdrop-filter: blur(6px);
-}
-
-.modal.show { display: flex; }
-
-.modal-box {
-    width: 100%;
-    max-width: 380px;
-    padding: 32px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
-}
-
-.modal-box h2 {
-    font-size: 1.15rem;
-    margin-bottom: 8px;
-}
-
-.modal-box p {
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    margin-bottom: 18px;
-}
-
-.modal-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.modal-actions button {
-    flex: 1;
-}
-
-/* PROFILE */
-
-.profile {
-    width: 100%;
-    max-width: 380px;
-    padding: 32px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
-}
-
-.profile-top {
-    text-align: center;
-    margin-bottom: 22px;
-}
-
-.profile-top img {
-    width: 76px;
-    height: 76px;
-    margin-bottom: 14px;
-    border-radius: 14px;
-    border: 1px solid var(--border-strong);
-    image-rendering: pixelated;
-}
-
-.profile-top h2 {
-    font-size: 1.2rem;
-    margin-bottom: 4px;
-}
-
-.profile-top p {
-    color: var(--text-muted);
-    font-size: 0.85rem;
-}
-
-.details {
-    display: grid;
+  .player-info,
+  .stats-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 24px;
-}
+  }
 
-.detail {
-    padding: 14px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-}
+  .skill-columns,
+  .style-grid {
+    grid-template-columns: 1fr;
+  }
 
-.detail span {
-    display: block;
-    color: var(--text-dim);
-    font-size: 0.66rem;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-}
-
-.detail strong {
-    font-size: 0.98rem;
-}
-
-.profile .close {
-    width: 100%;
-}
-
-/* ==========================================================================
-   SAVE BAR / TOAST
-   ========================================================================== */
-
-.save-bar {
-    position: fixed;
-    left: 50%;
-    bottom: -100px;
-    transform: translateX(-50%);
-    z-index: 90;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
-    background: var(--panel);
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    backdrop-filter: blur(16px);
-    transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.save-bar.show { bottom: 24px; }
-
-.save-bar span {
-    color: var(--gold);
-    font-weight: 700;
-    font-size: 0.88rem;
-    padding-right: 4px;
-}
-
-.toast {
-    position: fixed;
-    right: 24px;
-    bottom: 24px;
-    z-index: 110;
-    padding: 13px 20px;
-    background: var(--panel);
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-sm);
-    box-shadow: var(--shadow);
-    font-size: 0.88rem;
-    opacity: 0;
-    transform: translateY(12px);
-    pointer-events: none;
-    transition: var(--transition);
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* ==========================================================================
-   MOBILE
-   ========================================================================== */
-
-@media (max-width: 860px) {
-    .podium { grid-template-columns: 1fr; }
-    .podium-card.first { order: -1; }
-}
-
-@media (max-width: 768px) {
-    .header { padding: 14px 16px; }
-    .container { padding: 32px 16px 100px; }
-
-    .stats { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .stat { padding: 16px 14px; }
-
-    .panel { padding: 16px; }
-    .tier-grid { grid-template-columns: repeat(2, 1fr); }
-    .details { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 480px) {
-    .stats { grid-template-columns: 1fr; }
-    .nav-buttons { width: 100%; justify-content: flex-start; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        scroll-behavior: auto !important;
-        transition: none !important;
-        animation: none !important;
-    }
+  h1 {
+    letter-spacing: -2px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN SCREEN -->
-<div class="login-screen" id="loginScreen">
-    <div class="login-box">
-
-        <div class="login-logo">⚔</div>
-
-        <h1>Welcome to MC Ranked</h1>
-
-        <p>
-            Before you can enter the board, tell us who you are.
-            This info (plus a timestamp) is only visible to admins/owner.
-        </p>
-
-        <label class="field-label" for="mcUsername">Minecraft username</label>
-        <input
-            id="mcUsername"
-            class="login-input"
-            placeholder="Minecraft username"
-            maxlength="16"
-            autocomplete="off"
-        >
-
-        <label class="field-label" for="mcDiscord">Discord / MC name</label>
-        <input
-            id="mcDiscord"
-            class="login-input"
-            placeholder="Discord username or MC name"
-            maxlength="32"
-            autocomplete="off"
-        >
-
-        <label class="field-label" for="mcTier">Your tier</label>
-        <select id="mcTier" class="login-input"></select>
-
-        <label class="field-label" for="mcTimezone">Your timezone</label>
-        <select id="mcTimezone" class="login-input"></select>
-
-        <button class="login-button" onclick="login()">
-            Continue
-        </button>
-
-        <div class="login-error" id="loginError"></div>
-
-    </div>
+<div class="flag-stripe">
+  <div></div><div></div><div></div>
 </div>
 
-<header class="header">
-    <nav class="nav">
+<nav>
+  <div class="brand">BELGIUM<span> FC</span></div>
+  <div class="nav-right">PLAYER SCOUTING · 2026</div>
+</nav>
 
-        <div class="logo">
-            <div class="logo-icon">⚔</div>
-            MC RANKED
-        </div>
+<section class="hero">
 
-        <div class="nav-buttons">
+  <div class="hero-content">
+    <div class="country">🇧🇪 BELGIAN FOOTBALL PROSPECT</div>
 
-            <button
-                class="nav-btn edit-btn"
-                id="editModeButton"
-                onclick="requestEditMode()">
-                ✎ Edit Mode
-            </button>
+    <h1>YLANDRO<br>BURY</h1>
 
-            <button
-                class="nav-btn active"
-                onclick="goTo('leaderboard',this)">
-                Leaderboard
-            </button>
+    <p class="position">LEFT WINGER · RIGHT FOOTED</p>
 
-            <button
-                class="nav-btn"
-                onclick="goTo('players',this)">
-                Players
-            </button>
-
-            <button
-                class="nav-btn"
-                onclick="goTo('tiers',this)">
-                Tier List
-            </button>
-
-            <button
-                class="nav-btn editing-only"
-                onclick="goTo('submissionsSection',this)">
-                🔒 Submissions
-            </button>
-
-        </div>
-
-    </nav>
-</header>
-
-<main class="container">
-
-    <section class="hero">
-
-        <div class="badge">
-            ⚡ MINECRAFT PVP RANKINGS
-        </div>
-
-        <h1>
-            Dominate the <span class="gradient">Leaderboard.</span>
-        </h1>
-
-        <p>
-            Welcome, <strong id="welcomeUsername">Player</strong>.
-            Search players, inspect profiles and manage the rankings.
-        </p>
-
-    </section>
-
-    <section class="stats">
-
-        <div class="stat">
-            <div class="stat-label">Players</div>
-            <div class="stat-value" id="playerCount">0</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-label">Top player</div>
-            <div class="stat-value" id="topPlayer">—</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-label">Your account</div>
-            <div class="stat-value" id="loggedPlayer">—</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-label">Total points</div>
-            <div class="stat-value" id="totalPoints">0</div>
-        </div>
-
-    </section>
-
-    <!-- LEADERBOARD -->
-
-    <section class="section" id="leaderboard">
-
-        <div class="section-title">
-            <h2>🏆 Leaderboard</h2>
-            <p>Click a player to see their full profile.</p>
-        </div>
-
-        <div class="panel">
-
-            <div class="search-wrap">
-                <input
-                    id="search"
-                    class="search"
-                    placeholder="🔎 Search every player..."
-                    oninput="renderTable()"
-                >
-            </div>
-
-            <div class="table-wrap">
-
-                <table>
-
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Player</th>
-                            <th>Tier</th>
-                            <th>Points</th>
-                            <th>Level</th>
-                            <th>Profile</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="playerTable"></tbody>
-
-                </table>
-
-            </div>
-
-            <button
-                id="addPlayerButton"
-                class="add-player"
-                onclick="addPlayer()">
-                + Add Player
-            </button>
-
-        </div>
-
-    </section>
-
-    <!-- TOP PLAYERS -->
-
-    <section class="section" id="players">
-
-        <div class="section-title">
-            <h2>🥇 Top Players</h2>
-            <p>The current top three.</p>
-        </div>
-
-        <div class="podium" id="podium"></div>
-
-    </section>
-
-    <!-- TIERS -->
-
-    <section class="section" id="tiers">
-
-        <div class="section-title">
-            <h2>📊 Tier List</h2>
-            <p>Official tier mapping.</p>
-        </div>
-
-        <div class="tier-grid">
-
-            <div class="tier-box">
-                <strong>A+</strong>
-                <span>HT1</span>
-            </div>
-
-            <div class="tier-box">
-                <strong>A</strong>
-                <span>LT1</span>
-            </div>
-
-            <div class="tier-box">
-                <strong>B+</strong>
-                <span>HT2</span>
-            </div>
-
-            <div class="tier-box">
-                <strong>B</strong>
-                <span>LT2</span>
-            </div>
-
-            <div class="tier-box">
-                <strong>C+</strong>
-                <span>HT3</span>
-            </div>
-
-            <div class="tier-box">
-                <strong>C</strong>
-                <span>LT3</span>
-            </div>
-
-            <div class="tier-box">
-                <strong>D+</strong>
-                <span>HT4</span>
-            </div>
-
-            <div class="tier-box">
-                <strong>D</strong>
-                <span>LT4</span>
-            </div>
-
-            <div class="tier-box">
-                <strong>E+</strong>
-                <span>HT5</span>
-            </div>
-
-            <div class="tier-box">
-                <strong>E</strong>
-                <span>LT5</span>
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- SUBMISSIONS LOG (admin/owner only) -->
-
-    <section class="section" id="submissionsSection">
-
-        <div class="section-title">
-            <h2>🔒 Login Submissions</h2>
-            <p>Admin/owner only — tier, timezone, Discord/MC name and timestamp for everyone who has logged in.</p>
-        </div>
-
-        <div class="panel">
-
-            <div class="table-wrap">
-
-                <table>
-
-                    <thead>
-                        <tr>
-                            <th>Player</th>
-                            <th>Discord / MC</th>
-                            <th>Tier</th>
-                            <th>Timezone</th>
-                            <th>Submitted</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="submissionsTable">
-                        <tr>
-                            <td colspan="5">
-                                <div style="text-align:center;padding:35px;color:#8b93a3;">
-                                    No submissions loaded yet.
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </section>
-
-    <div class="footer">
-        MC Ranked • Welcome <span id="footerUsername"></span>
+    <div class="hero-tag">
+      PLAYER NUMBER 11
     </div>
+  </div>
+
+  <div class="shirt-number">11</div>
+
+</section>
+
+<div class="color-band">
+  <div></div><div></div><div></div>
+</div>
+
+<main>
+
+  <div class="section-header">
+    PLAYER <span>IDENTITY</span>
+  </div>
+
+  <div class="player-info">
+    <div class="info-card">
+      <strong>13</strong>
+      <small>AGE</small>
+    </div>
+
+    <div class="info-card">
+      <strong>LW</strong>
+      <small>POSITION</small>
+    </div>
+
+    <div class="info-card">
+      <strong>RIGHT</strong>
+      <small>FOOT</small>
+    </div>
+
+    <div class="info-card">
+      <strong>STREET</strong>
+      <small>BACKGROUND</small>
+    </div>
+  </div>
+
+  <div class="section-header">
+    PLAYER <span>STATISTICS</span>
+  </div>
+
+  <div class="stats-grid">
+
+    <div class="stat-card">
+      <strong>20–25.4</strong>
+      <p>RECORDED SPEED · KM/H</p>
+    </div>
+
+    <div class="stat-card">
+      <strong>58%</strong>
+      <p>DRIBBLE SUCCESS</p>
+    </div>
+
+    <div class="stat-card">
+      <strong>20M</strong>
+      <p>CURVED PASS RANGE</p>
+    </div>
+
+    <div class="stat-card">
+      <strong>GOOD</strong>
+      <p>PHYSICAL STRENGTH</p>
+    </div>
+
+  </div>
+
+  <div class="section-header">
+    PLAYER <span>ATTRIBUTES</span>
+  </div>
+
+  <div class="skill-columns">
+
+    <div class="skill-panel">
+      <h3>TECHNICAL ABILITIES</h3>
+
+      <div class="skill">
+        <div class="skill-title">
+          <span>Close Ball Control</span>
+          <b>Hazard Style</b>
+        </div>
+        <div class="bar">
+          <div class="fill" style="width:85%"></div>
+        </div>
+      </div>
+
+      <div class="skill">
+        <div class="skill-title">
+          <span>Dribbling</span>
+          <b>58% success</b>
+        </div>
+        <div class="bar">
+          <div class="fill" style="width:58%"></div>
+        </div>
+      </div>
+
+      <div class="skill">
+        <div class="skill-title">
+          <span>Shooting</span>
+          <b>Good</b>
+        </div>
+        <div class="bar">
+          <div class="fill" style="width:76%"></div>
+        </div>
+      </div>
+
+      <div class="skill">
+        <div class="skill-title">
+          <span>Passing</span>
+          <b>Good</b>
+        </div>
+        <div class="bar">
+          <div class="fill" style="width:80%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-panel">
+      <h3>PHYSICAL ABILITIES</h3>
+
+      <div class="skill">
+        <div class="skill-title">
+          <span>Speed</span>
+          <b>Doku Style</b>
+        </div>
+        <div class="bar">
+          <div class="fill" style="width:90%"></div>
+        </div>
+      </div>
+
+      <div class="skill">
+        <div class="skill-title">
+          <span>Strength</span>
+          <b>Good</b>
+        </div>
+        <div class="bar">
+          <div class="fill" style="width:80%"></div>
+        </div>
+      </div>
+
+      <div class="skill">
+        <div class="skill-title">
+          <span>Defending</span>
+          <b>Pretty Good</b>
+        </div>
+        <div class="bar">
+          <div class="fill" style="width:75%"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-header">
+    PLAYING <span>IDENTITY</span>
+  </div>
+
+  <div class="style-grid">
+
+    <div class="style-card">
+      <div class="style-label">SPEED & EXPLOSIVENESS</div>
+      <h3>⚡ DOKU DNA</h3>
+      <p>
+        Fast attacking movement, acceleration and
+        the ability to challenge defenders in one-on-one
+        situations. A direct and aggressive winger style.
+      </p>
+    </div>
+
+    <div class="style-card">
+      <div class="style-label">TECHNIQUE & CONTROL</div>
+      <h3>🎩 HAZARD DNA</h3>
+      <p>
+        Close ball control, tight touches and creativity
+        in small spaces. A technical style focused on
+        keeping possession while moving past defenders.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="section-header">
+    SCOUT <span>REPORT</span>
+  </div>
+
+  <div class="report">
+    <p>
+      Ylandro Bury is a 13-year-old right-footed left winger
+      from Belgium with a street football background.
+
+      His playing identity is inspired by two Belgian
+      football stars: Jérémy Doku and Eden Hazard.
+
+      His recorded speed reaches 25.4 km/h, with a
+      58% dribble success rate. He also demonstrates
+      good shooting, passing, physical strength and
+      defensive contribution.
+
+      His profile combines explosive movement with
+      close ball control, making him an interesting
+      young attacking prospect to develop.
+    </p>
+  </div>
+
+  <div class="final-banner">
+    <h2>MADE IN BELGIUM 🇧🇪</h2>
+    <p>YLANDRO BURY · NUMBER 11 · LEFT WINGER</p>
+  </div>
 
 </main>
 
-<!-- EDIT PASSWORD MODAL -->
-
-<div class="modal" id="passwordModal">
-
-    <div class="modal-box">
-
-        <h2>🔐 Admin Edit Mode</h2>
-
-        <p>
-            Enter the edit password to modify players, ranks,
-            tiers and points — and to view login submissions.
-        </p>
-
-        <input
-            id="editPassword"
-            class="modal-input"
-            type="password"
-            placeholder="Edit password"
-            onkeydown="if(event.key==='Enter')verifyEditPassword()"
-        >
-
-        <div class="modal-actions">
-
-            <button
-                class="cancel"
-                onclick="closePasswordModal()">
-                Cancel
-            </button>
-
-            <button
-                class="confirm"
-                onclick="verifyEditPassword()">
-                Unlock
-            </button>
-
-        </div>
-
-        <div class="login-error" id="passwordError"></div>
-
-    </div>
-
-</div>
-
-<!-- PLAYER PROFILE -->
-
-<div
-    class="modal"
-    id="profileModal"
-    onclick="closeProfileOutside(event)">
-
-    <div class="profile">
-
-        <div class="profile-top">
-
-            <img id="profileHead">
-
-            <h2 id="profileName">Player</h2>
-
-            <p id="profileSubtitle">
-                Minecraft PvP Player
-            </p>
-
-        </div>
-
-        <div class="details">
-
-            <div class="detail">
-                <span>Position</span>
-                <strong id="profileRank">#1</strong>
-            </div>
-
-            <div class="detail">
-                <span>Tier</span>
-                <strong id="profileTier">A+</strong>
-            </div>
-
-            <div class="detail">
-                <span>Tier level</span>
-                <strong id="profileLevel">HT1</strong>
-            </div>
-
-            <div class="detail">
-                <span>Points</span>
-                <strong id="profilePoints">0</strong>
-            </div>
-
-            <div class="detail">
-                <span>Account</span>
-                <strong id="profileAccount">Player</strong>
-            </div>
-
-            <div class="detail">
-                <span>Status</span>
-                <strong style="color:#4ee08a">
-                    ● Active
-                </strong>
-            </div>
-
-        </div>
-
-        <button
-            class="close"
-            onclick="closeProfile()">
-            Close Profile
-        </button>
-
-    </div>
-
-</div>
-
-<!-- SAVE BAR -->
-
-<div class="save-bar" id="saveBar">
-
-    <span>✎ Editing</span>
-
-    <button class="save" onclick="saveData()">
-        Save
-    </button>
-
-    <button class="reset" onclick="resetData()">
-        Reset
-    </button>
-
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-
-/* =========================
-   CONFIG
-========================= */
-
-/*
-    IMPORTANT:
-    This is NOT your Minecraft password.
-
-    Change this to whatever separate
-    admin password you want for editing.
-
-    For a real website, this password must
-    be checked on a server (or gated behind
-    Supabase Row Level Security), not just in
-    client-side JavaScript — anyone can read
-    this file's source and see the password,
-    and anyone can call the Supabase REST API
-    directly with the anon key below, bypassing
-    this UI entirely, unless you add RLS write
-    policies on the "players" and "submissions"
-    tables.
-
-    That same limitation applies to the new
-    "submissions" log below: hiding the section
-    behind this password keeps it out of the
-    normal UI for normal players, but it is NOT
-    real access control, because the anon key
-    is public. If you actually need submissions
-    to be unreadable by anyone but you, you must
-    add a Supabase RLS policy that only allows
-    SELECT on "submissions" for an authenticated
-    admin user (not the anon role).
-*/
-const EDIT_PASSWORD = "DeconnectSMPIzanarchySaikyoX8**";
-
-// =========================
-// SUPABASE CONFIG
-// =========================
-// Replace these with the values from Supabase -> Project Settings -> API.
-const SUPABASE_URL = "https://vgvgfhvrfgbjaxgkjgam.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZndmdmaHZyZmdiamF4Z2tqZ2FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MTc5MDEsImV4cCI6MjEwNDE5MzkwMX0.9rJrcSuP-z9FK2f27j0OcpV_6f1-XxOTXniDyUBjCK8";
-
-const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-);
-
-/*
-    SUPABASE SETUP — run once in the SQL editor:
-
-    create table if not exists submissions (
-        id bigint generated by default as identity primary key,
-        mc_username text not null,
-        discord_name text not null,
-        tier text not null,
-        timezone text not null,
-        created_at timestamptz not null default now()
-    );
-
-    -- allow the login form (anon key) to insert new submissions:
-    alter table submissions enable row level security;
-
-    create policy "anyone can insert a submission"
-        on submissions for insert
-        to anon
-        with check (true);
-
-    -- only allow reading submissions back out for admins.
-    -- with the anon key alone there is no real "admin" identity,
-    -- so if you need this locked server-side, read submissions
-    -- through a server function / service-role key instead of
-    -- straight from the browser.
-*/
-
-
-/* =========================
-   PLAYER DATA
-========================= */
-
-const defaultPlayers = [
-
-    {
-        name: "Izanarchy",
-        tier: "A+",
-        points: 1250
-    },
-
-    {
-        name: "Notch",
-        tier: "A",
-        points: 1100
-    },
-
-    {
-        name: "Dream",
-        tier: "B+",
-        points: 980
-    },
-
-    {
-        name: "Steve",
-        tier: "C+",
-        points: 850
-    },
-
-    {
-        name: "Alex",
-        tier: "D+",
-        points: 700
-    },
-
-    {
-        name: "Hypixel",
-        tier: "E+",
-        points: 500
-    }
-
-];
-
-const tierLevels = {
-
-    "A+": "HT1",
-    "A": "LT1",
-
-    "B+": "HT2",
-    "B": "LT2",
-
-    "C+": "HT3",
-    "C": "LT3",
-
-    "D+": "HT4",
-    "D": "LT4",
-
-    "E+": "HT5",
-    "E": "LT5"
-
-};
-
-let players = [];
-let submissions = [];
-
-let loggedUsername =
-    localStorage.getItem("mcRankedUsername");
-
-let editing = false;
-
-
-/* =========================
-   ONLINE DATABASE
-========================= */
-
-async function loadPlayersFromDatabase() {
-
-    try {
-
-        const { data, error } = await supabaseClient
-            .from("players")
-            .select("id,name,tier,points")
-            .order("points", { ascending: false });
-
-        if (error) throw error;
-
-        // First visit: seed the database with the original players.
-        if (!data || data.length === 0) {
-
-            players = structuredClone(defaultPlayers);
-
-            await replacePlayersInDatabase(players);
-
-            return;
-        }
-
-        players = data.map(player => ({
-            id: player.id,
-            name: player.name,
-            tier: player.tier,
-            points: Number(player.points) || 0
-        }));
-
-    } catch (error) {
-
-        console.error("Supabase load error:", error);
-
-        players = structuredClone(defaultPlayers);
-
-        showToast("⚠️ Online database could not be loaded");
-
-    }
-}
-
-async function replacePlayersInDatabase(list) {
-
-    const { error: deleteError } = await supabaseClient
-        .from("players")
-        .delete()
-        .neq("id", 0);
-
-    if (deleteError) throw deleteError;
-
-    const rows = list.map(player => ({
-        name: String(player.name).trim(),
-        tier: player.tier,
-        points: Math.max(0, Number(player.points) || 0)
-    }));
-
-    if (!rows.length) return;
-
-    const { error: insertError } = await supabaseClient
-        .from("players")
-        .insert(rows);
-
-    if (insertError) throw insertError;
-}
-
-async function insertSubmission(submission) {
-
-    try {
-
-        const { error } = await supabaseClient
-            .from("submissions")
-            .insert([{
-                mc_username: submission.mc_username,
-                discord_name: submission.discord_name,
-                tier: submission.tier,
-                timezone: submission.timezone
-                // created_at is set by the database default (now())
-            }]);
-
-        if (error) throw error;
-
-    } catch (error) {
-
-        console.error("Supabase submission error:", error);
-
-        // Don't block the player from entering just because the
-        // admin-only log failed to save.
-        showToast("⚠️ Could not save your submission info");
-
-    }
-
-}
-
-async function loadSubmissions() {
-
-    try {
-
-        const { data, error } = await supabaseClient
-            .from("submissions")
-            .select("id,mc_username,discord_name,tier,timezone,created_at")
-            .order("created_at", { ascending: false });
-
-        if (error) throw error;
-
-        submissions = data || [];
-
-    } catch (error) {
-
-        console.error("Supabase submissions load error:", error);
-
-        submissions = [];
-
-        showToast("⚠️ Could not load submissions");
-
-    }
-
-}
-
-/* =========================
-   LOGIN
-========================= */
-
-function populateLoginSelects() {
-
-    document.getElementById("mcTier").innerHTML =
-        tierOptions("A+");
-
-    document.getElementById("mcTimezone").innerHTML =
-        timezoneOptions();
-
-}
-
-function timezoneOptions() {
-
-    const zones = [];
-
-    for (let offset = -12; offset <= 14; offset++) {
-
-        const label =
-            offset === 0
-            ? "UTC"
-            : "UTC" + (offset > 0 ? "+" : "") + offset;
-
-        zones.push(label);
-
-    }
-
-    return zones.map(zone => `
-
-        <option value="${zone}">
-            ${zone}
-        </option>
-
-    `).join("");
-
-}
-
-async function login() {
-
-    const usernameInput =
-        document.getElementById("mcUsername");
-
-    const discordInput =
-        document.getElementById("mcDiscord");
-
-    const tierInput =
-        document.getElementById("mcTier");
-
-    const timezoneInput =
-        document.getElementById("mcTimezone");
-
-    const username =
-        usernameInput.value.trim();
-
-    const discordName =
-        discordInput.value.trim();
-
-    const tier =
-        tierInput.value;
-
-    const timezone =
-        timezoneInput.value;
-
-    const error =
-        document.getElementById("loginError");
-
-    if (!username) {
-
-        error.textContent =
-            "Please enter your Minecraft username.";
-
-        return;
-    }
-
-    if (!/^[A-Za-z0-9_]{3,16}$/.test(username)) {
-
-        error.textContent =
-            "Enter a valid Minecraft username.";
-
-        return;
-    }
-
-    if (!discordName) {
-
-        error.textContent =
-            "Please enter your Discord / MC name.";
-
-        return;
-    }
-
-    if (!tier) {
-
-        error.textContent =
-            "Please select your tier.";
-
-        return;
-    }
-
-    if (!timezone) {
-
-        error.textContent =
-            "Please select your timezone.";
-
-        return;
-    }
-
-    error.textContent = "";
-
-    loggedUsername = username;
-
-    localStorage.setItem(
-        "mcRankedUsername",
-        username
-    );
-
-    const submission = {
-        mc_username: username,
-        discord_name: discordName,
-        tier: tier,
-        timezone: timezone
-    };
-
-    // Save the admin-only submission record, then let the player in.
-    // We don't block entry on this succeeding — see insertSubmission().
-    await insertSubmission(submission);
-
-    showWebsite();
-
-}
-
-async function showWebsite() {
-
-    document.getElementById(
-        "loginScreen"
-    ).style.display = "none";
-
-    document.getElementById(
-        "welcomeUsername"
-    ).textContent = loggedUsername;
-
-    document.getElementById(
-        "loggedPlayer"
-    ).textContent = loggedUsername;
-
-    document.getElementById(
-        "footerUsername"
-    ).textContent = loggedUsername;
-
-    await loadPlayersFromDatabase();
-
-    renderAll();
-
-}
-
-
-/* =========================
-   EDIT MODE PASSWORD
-========================= */
-
-function requestEditMode() {
-
-    if (editing) {
-
-        exitEditMode();
-
-        return;
-    }
-
-    document.getElementById(
-        "editPassword"
-    ).value = "";
-
-    document.getElementById(
-        "passwordError"
-    ).textContent = "";
-
-    document.getElementById(
-        "passwordModal"
-    ).classList.add("show");
-
-    setTimeout(() => {
-
-        document.getElementById(
-            "editPassword"
-        ).focus();
-
-    },100);
-
-}
-
-async function verifyEditPassword() {
-
-    const password =
-        document.getElementById(
-            "editPassword"
-        ).value;
-
-    const error =
-        document.getElementById(
-            "passwordError"
-        );
-
-    if (password !== EDIT_PASSWORD) {
-
-        error.textContent =
-            "❌ Incorrect edit password.";
-
-        return;
-    }
-
-    document.getElementById(
-        "passwordModal"
-    ).classList.remove("show");
-
-    editing = true;
-
-    document.body.classList.add("editing");
-
-    document.getElementById(
-        "editModeButton"
-    ).textContent = "✓ Exit Edit Mode";
-
-    document.getElementById(
-        "editModeButton"
-    ).classList.add("editing");
-
-    document.getElementById(
-        "saveBar"
-    ).classList.add("show");
-
-    showToast("🔓 Edit mode unlocked");
-
-    renderAll();
-
-    // Only load/show the admin-only submissions log once the
-    // edit password has been verified.
-    await loadSubmissions();
-
-    renderSubmissions();
-
-}
-
-function exitEditMode() {
-
-    editing = false;
-
-    document.body.classList.remove("editing");
-
-    document.getElementById(
-        "editModeButton"
-    ).textContent = "✎ Edit Mode";
-
-    document.getElementById(
-        "editModeButton"
-    ).classList.remove("editing");
-
-    document.getElementById(
-        "saveBar"
-    ).classList.remove("show");
-
-    renderAll();
-
-    showToast("Edit mode locked");
-
-}
-
-function closePasswordModal() {
-
-    document.getElementById(
-        "passwordModal"
-    ).classList.remove("show");
-
-}
-
-
-/* =========================
-   RENDER
-   ---------------------------------------------------------
-   NOTE: renderAll() no longer re-sorts by points on every
-   call. It used to, which meant any manual reorder (the
-   position field or the ▲▼ buttons in Edit Mode) got wiped
-   out the instant it ran, because it immediately fell back
-   to points order. Sorting now only happens where it should:
-   once when data is loaded from the database, and again
-   whenever a player's points are actually edited.
-========================= */
-
-function sortByPoints() {
-
-    players.sort(
-        (a,b) =>
-            Number(b.points) -
-            Number(a.points)
-    );
-
-}
-
-function renderAll() {
-
-    renderTable();
-    renderPodium();
-    updateStats();
-
-}
-
-function renderTable() {
-
-    const tbody =
-        document.getElementById(
-            "playerTable"
-        );
-
-    const search =
-        document.getElementById(
-            "search"
-        ).value
-        .toLowerCase()
-        .trim();
-
-    const filtered =
-        players
-        .map((player,index) => ({
-            player,
-            index
-        }))
-        .filter(({player,index}) => {
-
-            const rank = index + 1;
-
-            const text = [
-
-                player.name,
-                player.tier,
-                tierLevels[player.tier],
-                player.points,
-                rank
-
-            ].join(" ").toLowerCase();
-
-            return text.includes(search);
-
-        });
-
-    if (!filtered.length) {
-
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="6">
-                    <div style="
-                        text-align:center;
-                        padding:35px;
-                        color:#8b93a3;
-                    ">
-                        No players found.
-                    </div>
-                </td>
-            </tr>
-        `;
-
-        return;
-    }
-
-    tbody.innerHTML =
-        filtered.map(({player,index}) => {
-
-            const rank = index + 1;
-
-            if (editing) {
-
-                return `
-
-                <tr class="player-row">
-
-                    <td>
-                        <input
-                            class="edit-field"
-                            type="number"
-                            min="1"
-                            value="${rank}"
-                            onchange="
-                                changePosition(
-                                    ${index},
-                                    this.value
-                                )
-                            "
-                        >
-                    </td>
-
-                    <td>
-
-                        <div class="player">
-
-                            <img
-                                class="head"
-                                src="${headURL(player.name)}"
-                            >
-
-                            <input
-                                class="edit-field"
-                                value="${escapeHTML(player.name)}"
-                                onchange="
-                                    updatePlayer(
-                                        ${index},
-                                        'name',
-                                        this.value
-                                    )
-                                "
-                            >
-
-                        </div>
-
-                    </td>
-
-                    <td>
-
-                        <select
-                            class="edit-field"
-                            onchange="
-                                updatePlayer(
-                                    ${index},
-                                    'tier',
-                                    this.value
-                                )
-                            "
-                        >
-
-                            ${tierOptions(player.tier)}
-
-                        </select>
-
-                    </td>
-
-                    <td>
-
-                        <input
-                            class="edit-field"
-                            type="number"
-                            value="${player.points}"
-                            onchange="
-                                updatePlayer(
-                                    ${index},
-                                    'points',
-                                    this.value
-                                )
-                            "
-                        >
-
-                    </td>
-
-                    <td>
-
-                        <button
-                            class="small-btn"
-                            onclick="
-                                movePlayer(${index},-1)
-                            ">
-                            ▲
-                        </button>
-
-                        <button
-                            class="small-btn"
-                            onclick="
-                                movePlayer(${index},1)
-                            ">
-                            ▼
-                        </button>
-
-                    </td>
-
-                    <td>
-
-                        <button
-                            class="small-btn"
-                            onclick="
-                                deletePlayer(${index})
-                            ">
-                            Delete
-                        </button>
-
-                    </td>
-
-                </tr>
-
-                `;
-
-            }
-
-            const isYou =
-                player.name.toLowerCase() ===
-                loggedUsername.toLowerCase();
-
-            return `
-
-            <tr
-                class="player-row"
-                onclick="openProfile(${index})"
-                style="cursor:pointer"
-            >
-
-                <td>
-                    <strong>#${rank}</strong>
-                </td>
-
-                <td>
-
-                    <div class="player">
-
-                        <img
-                            class="head"
-                            src="${headURL(player.name)}"
-                        >
-
-                        <div class="player-name">
-
-                            ${escapeHTML(player.name)}
-
-                            ${
-                                isYou
-                                ? '<span class="you">YOU</span>'
-                                : ''
-                            }
-
-                        </div>
-
-                    </div>
-
-                </td>
-
-                <td>
-
-                    <span
-                        class="
-                            tier
-                            ${tierClass(player.tier)}
-                        "
-                    >
-                        ${player.tier}
-                    </span>
-
-                </td>
-
-                <td>
-                    <strong>
-                        ${Number(player.points).toLocaleString()}
-                    </strong>
-                </td>
-
-                <td>
-                    <span style="color:#8b93a3">
-                        ${tierLevels[player.tier]}
-                    </span>
-                </td>
-
-                <td>
-
-                    <button
-                        class="small-btn"
-                        onclick="
-                            event.stopPropagation();
-                            openProfile(${index})
-                        "
-                    >
-                        View →
-                    </button>
-
-                </td>
-
-            </tr>
-
-            `;
-
-        }).join("");
-
-}
-
-
-/* =========================
-   SUBMISSIONS (admin/owner only)
-========================= */
-
-function renderSubmissions() {
-
-    const tbody =
-        document.getElementById("submissionsTable");
-
-    if (!tbody) return;
-
-    if (!submissions.length) {
-
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="5">
-                    <div style="
-                        text-align:center;
-                        padding:35px;
-                        color:#8b93a3;
-                    ">
-                        No submissions yet.
-                    </div>
-                </td>
-            </tr>
-        `;
-
-        return;
-    }
-
-    tbody.innerHTML =
-        submissions.map(entry => {
-
-            const timestamp =
-                entry.created_at
-                ? new Date(entry.created_at).toLocaleString()
-                : "—";
-
-            return `
-
-            <tr class="player-row">
-
-                <td>
-                    <strong>${escapeHTML(entry.mc_username)}</strong>
-                </td>
-
-                <td>
-                    ${escapeHTML(entry.discord_name)}
-                </td>
-
-                <td>
-                    <span class="tier ${tierClass(entry.tier)}">
-                        ${entry.tier}
-                    </span>
-                </td>
-
-                <td>
-                    ${escapeHTML(entry.timezone)}
-                </td>
-
-                <td>
-                    <span style="color:#8b93a3">
-                        ${timestamp}
-                    </span>
-                </td>
-
-            </tr>
-
-            `;
-
-        }).join("");
-
-}
-
-
-/* =========================
-   PODIUM
-========================= */
-
-function renderPodium() {
-
-    const podium =
-        document.getElementById("podium");
-
-    const top =
-        players.slice(0,3);
-
-    const order =
-        [1,0,2];
-
-    podium.innerHTML =
-        order
-        .filter(i => top[i])
-        .map(i => {
-
-            const player = top[i];
-
-            return `
-
-            <div
-                class="
-                    podium-card
-                    ${i === 0 ? "first" : ""}
-                "
-                onclick="openProfile(${i})"
-            >
-
-                <div style="
-                    color:#f2c14e;
-                    font-weight:800;
-                ">
-                    ${i === 0 ? "👑 #1" : "#" + (i+1)}
-                </div>
-
-                <img src="${headURL(player.name)}">
-
-                <h3>
-                    ${escapeHTML(player.name)}
-                </h3>
-
-                <div style="margin:12px">
-
-                    <span
-                        class="
-                            tier
-                            ${tierClass(player.tier)}
-                        "
-                    >
-                        ${player.tier}
-                    </span>
-
-                </div>
-
-                <strong>
-                    ${Number(player.points).toLocaleString()} pts
-                </strong>
-
-            </div>
-
-            `;
-
-        }).join("");
-
-}
-
-
-/* =========================
-   STATS
-========================= */
-
-function updateStats() {
-
-    document.getElementById(
-        "playerCount"
-    ).textContent = players.length;
-
-    document.getElementById(
-        "topPlayer"
-    ).textContent =
-        players.length
-        ? players[0].name
-        : "—";
-
-    document.getElementById(
-        "totalPoints"
-    ).textContent =
-        players
-        .reduce(
-            (sum,p) =>
-                sum + Number(p.points || 0),
-            0
-        )
-        .toLocaleString();
-
-}
-
-
-/* =========================
-   EDITING
-========================= */
-
-function updatePlayer(
-    index,
-    property,
-    value
-) {
-
-    if (property === "points") {
-
-        value =
-            Math.max(
-                0,
-                Number(value) || 0
-            );
-
-    }
-
-    if (property === "name") {
-
-        value = String(value).trim() || "Unnamed";
-
-    }
-
-    players[index][property] = value;
-
-    if (property === "points") {
-
-        sortByPoints();
-
-    }
-
-    renderAll();
-
-}
-
-function movePlayer(index,direction) {
-
-    const target =
-        index + direction;
-
-    if (
-        target < 0 ||
-        target >= players.length
-    ) {
-        return;
-    }
-
-    [
-        players[index],
-        players[target]
-    ] = [
-        players[target],
-        players[index]
-    ];
-
-    renderAll();
-
-}
-
-function changePosition(
-    index,
-    position
-) {
-
-    let target =
-        Number(position) - 1;
-
-    target =
-        Math.max(
-            0,
-            Math.min(
-                players.length - 1,
-                target
-            )
-        );
-
-    const player =
-        players.splice(index,1)[0];
-
-    players.splice(
-        target,
-        0,
-        player
-    );
-
-    renderAll();
-
-}
-
-function addPlayer() {
-
-    players.push({
-
-        name: "NewPlayer",
-        tier: "E",
-        points: 0
-
-    });
-
-    renderAll();
-
-    showToast(
-        "New player added"
-    );
-
-}
-
-function deletePlayer(index) {
-
-    players.splice(index,1);
-
-    renderAll();
-
-    showToast(
-        "Player deleted"
-    );
-
-}
-
-
-/* =========================
-   SAVE / RESET
-========================= */
-
-async function saveData() {
-
-    if (!editing) return;
-
-    const saveButton =
-        document.querySelector(".save-bar .save");
-
-    if (saveButton) {
-        saveButton.disabled = true;
-        saveButton.textContent = "Saving...";
-    }
-
-    try {
-
-        await replacePlayersInDatabase(players);
-
-        await loadPlayersFromDatabase();
-
-        renderAll();
-
-        showToast(
-            "✓ Changes saved for everyone"
-        );
-
-    } catch (error) {
-
-        console.error("Supabase save error:", error);
-
-        showToast(
-            "❌ Save failed — check Supabase settings"
-        );
-
-    } finally {
-
-        if (saveButton) {
-            saveButton.disabled = false;
-            saveButton.textContent = "Save";
-        }
-
-    }
-
-}
-
-async function resetData() {
-
-    if (!editing) return;
-
-    if (!confirm(
-        "Reset all players to the original leaderboard?"
-    )) {
-        return;
-    }
-
-    try {
-
-        await replacePlayersInDatabase(
-            structuredClone(defaultPlayers)
-        );
-
-        await loadPlayersFromDatabase();
-
-        renderAll();
-
-        showToast(
-            "✓ Leaderboard reset for everyone"
-        );
-
-    } catch (error) {
-
-        console.error("Supabase reset error:", error);
-
-        showToast(
-            "❌ Reset failed — check Supabase settings"
-        );
-
-    }
-
-}
-
-function openProfile(index) {
-
-    const player =
-        players[index];
-
-    document.getElementById(
-        "profileHead"
-    ).src =
-        headURL(player.name);
-
-    document.getElementById(
-        "profileName"
-    ).textContent =
-        player.name;
-
-    document.getElementById(
-        "profileRank"
-    ).textContent =
-        "#" + (index + 1);
-
-    document.getElementById(
-        "profileTier"
-    ).textContent =
-        player.tier;
-
-    document.getElementById(
-        "profileLevel"
-    ).textContent =
-        tierLevels[player.tier];
-
-    document.getElementById(
-        "profilePoints"
-    ).textContent =
-        Number(player.points)
-        .toLocaleString();
-
-    document.getElementById(
-        "profileAccount"
-    ).textContent =
-        player.name;
-
-    document.getElementById(
-        "profileModal"
-    ).classList.add("show");
-
-}
-
-function closeProfile() {
-
-    document.getElementById(
-        "profileModal"
-    ).classList.remove("show");
-
-}
-
-function closeProfileOutside(event) {
-
-    if (
-        event.target.id ===
-        "profileModal"
-    ) {
-        closeProfile();
-    }
-
-}
-
-
-/* =========================
-   NAVIGATION
-========================= */
-
-function goTo(id,button) {
-
-    document.getElementById(id)
-        .scrollIntoView({
-            behavior:"smooth"
-        });
-
-    document
-        .querySelectorAll(".nav-btn")
-        .forEach(btn =>
-            btn.classList.remove("active")
-        );
-
-    button.classList.add("active");
-
-}
-
-
-/* =========================
-   HELPERS
-========================= */
-
-function headURL(name) {
-
-    return (
-        "https://mc-heads.net/avatar/" +
-        encodeURIComponent(name) +
-        "/64"
-    );
-
-}
-
-function tierClass(tier) {
-
-    return tier
-        .toLowerCase()
-        .replace("+","-plus");
-
-}
-
-function tierOptions(selected) {
-
-    return Object.keys(tierLevels)
-        .map(tier => `
-
-            <option
-                value="${tier}"
-                ${tier === selected ? "selected" : ""}
-            >
-                ${tier}
-            </option>
-
-        `)
-        .join("");
-
-}
-
-function escapeHTML(value) {
-
-    return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-
-}
-
-function showToast(message) {
-
-    const toast =
-        document.getElementById("toast");
-
-    toast.textContent = message;
-
-    toast.classList.add("show");
-
-    clearTimeout(window.toastTimer);
-
-    window.toastTimer =
-        setTimeout(() => {
-
-            toast.classList.remove("show");
-
-        },2200);
-
-}
-
-
-/* =========================
-   STARTUP
-========================= */
-
-populateLoginSelects();
-
-if (loggedUsername) {
-
-    showWebsite();
-
-} else {
-
-    document.getElementById(
-        "loginScreen"
-    ).style.display = "flex";
-
-}
-
-document.getElementById(
-    "mcUsername"
-).addEventListener(
-    "keydown",
-    event => {
-
-        if (event.key === "Enter") {
-            login();
-        }
-
-    }
-);
-
-</script>
+<footer>
+  BELGIUM <span>FC</span> · YLANDRO BURY · PLAYER PROFILE · 2026
+</footer>
 
 </body>
 </html>
